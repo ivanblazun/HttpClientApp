@@ -21,16 +21,16 @@ namespace WebHttpClient
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-            config.Routes.MapHttpRoute(
-                name: "SqlGetById",
-                routeTemplate: "api/{controller}/{action}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-            config.Routes.MapHttpRoute(
-                name: "GetByTitle",
-                routeTemplate: "api/{controller}/{action}/{title}",
-                defaults: new { title = RouteParameter.Optional }
-            );
+            //config.Routes.MapHttpRoute(
+            //    name: "SqlGetById",
+            //    routeTemplate: "api/{controller}/{action}/{id}",
+            //    defaults: new { id = RouteParameter.Optional }
+            //);
+            //config.Routes.MapHttpRoute(
+            //    name: "GetByTitle",
+            //    routeTemplate: "api/{controller}/{action}/{title}",
+            //    defaults: new { title = RouteParameter.Optional }
+            //);
 
 
         }

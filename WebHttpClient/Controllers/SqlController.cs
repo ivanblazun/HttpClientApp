@@ -23,7 +23,7 @@ namespace WebHttpClient.Controllers
         public AppDbContext appDbContext = new AppDbContext();
 
        
-        // GET api/sql
+        // GET Get all posts from user id api/sql
         [HttpGet]
         public List<string> Get([FromBody] User user)
         {
@@ -39,7 +39,8 @@ namespace WebHttpClient.Controllers
             return allPosts;
         }
 
-        //GET BY ID api/sql/GetById/5
+        //GET Get post by id from user id api/sql/GetById/5
+        [Route("api/sql/CallById")]
         [HttpGet]
         public string CallById([FromBody] User user, [FromUri] int id)
         {
@@ -57,8 +58,9 @@ namespace WebHttpClient.Controllers
             return deserializedPost;
         }
 
-        //GET BY ID api/sql/GetByTitle/5
-        [HttpGet, ActionName("GetByTitle")]
+        //GET BY ID api/sql/GetByTitle?title={}
+        [Route ("api/sql/GetByTitle")]
+        [HttpGet]
         
         public string GetByTitle([FromBody] User user, [FromUri] string title)
         {
@@ -76,7 +78,7 @@ namespace WebHttpClient.Controllers
             return deserializedPost;
         }
 
-        // POST api/sql
+        //POST Create new post api/sql
         [HttpPost]
         public void Post([FromBody] Post sendInput)
         {
@@ -94,13 +96,9 @@ namespace WebHttpClient.Controllers
 
             appDbContext.SaveChanges();
 
-            //message.GetConfiguration();
-
-            //message.CreateResponse(this.ControllerContext);
-
         }
 
-        // PUT api/sql/5
+        // PUT Update post api/sql/5
         public void Put(int id, [FromBody] Post updateInput)
         {
             var requestedPost = appDbContext.Posts.Where(i => i.Id==id).FirstOrDefault<Post>();
@@ -115,7 +113,7 @@ namespace WebHttpClient.Controllers
             }           
         }
 
-        // DELETE api/sql/5
+        // DELETE Delete Post api/sql/5
         public void Delete(int id)
         {
             var selectedPost = appDbContext.Posts.Where(i => i.Id == id).FirstOrDefault<Post>();

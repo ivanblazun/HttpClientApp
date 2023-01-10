@@ -14,5 +14,7 @@ namespace WebHttpClient.Data
         public DbSet<Post> Posts { get; set; }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<UserStatus> UserStatuses { get; set; }
     }
 }

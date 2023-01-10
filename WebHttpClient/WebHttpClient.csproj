@@ -162,7 +162,9 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SqlAdminController.cs" />
     <Compile Include="Controllers\SqlController.cs" />
+    <Compile Include="Controllers\SqlUserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Data\AppDbContext.cs" />
     <Compile Include="Global.asax.cs">
@@ -172,11 +174,25 @@
     <Compile Include="Migrations\202212302143458_Initial.Designer.cs">
       <DependentUpon>202212302143458_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202301062330543_UserStatus.cs" />
+    <Compile Include="Migrations\202301062330543_UserStatus.Designer.cs">
+      <DependentUpon>202301062330543_UserStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202301070015223_UserStatusSEED.cs" />
+    <Compile Include="Migrations\202301070015223_UserStatusSEED.Designer.cs">
+      <DependentUpon>202301070015223_UserStatusSEED.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202301100438501_UserAddedPasswordAndDate.cs" />
+    <Compile Include="Migrations\202301100438501_UserAddedPasswordAndDate.Designer.cs">
+      <DependentUpon>202301100438501_UserAddedPasswordAndDate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Post.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserSecurity\UserSecurityAuth.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -265,6 +281,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202212302143458_Initial.resx">
       <DependentUpon>202212302143458_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301062330543_UserStatus.resx">
+      <DependentUpon>202301062330543_UserStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301070015223_UserStatusSEED.resx">
+      <DependentUpon>202301070015223_UserStatusSEED.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301100438501_UserAddedPasswordAndDate.resx">
+      <DependentUpon>202301100438501_UserAddedPasswordAndDate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
