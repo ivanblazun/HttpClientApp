@@ -63,7 +63,7 @@ namespace WebHttpClient.Controllers
             }           
         }
 
-        // POST Login user
+        // POST Login user ///
         [HttpPost]
         [Route("api/sqluser/loginuser")]
         public HttpResponseMessage LoginUser(HttpRequestMessage httpRequest) 
