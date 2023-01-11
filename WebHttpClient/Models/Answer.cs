@@ -3,26 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-
 namespace WebHttpClient.Models
 {
-    public class Post
+    public class Answer
     {
-        
         public int Id { get; set; }
-        public string Title { get; set; }
+
         public string Body { get; set; }
-        public int Value { get; set; }
 
         // Navigation props
 
+        public int PostId { get; set; }
+        public Post ReferToPost { get; set; }
         public int UserId { get; set; }
+        public User FromUser { get; set; }
 
-        public User User { get; set; }
-
-        public Theme Theme { get; set; }
-
-        public List<Answer> Answers { get; set; }
 
     }
 }
