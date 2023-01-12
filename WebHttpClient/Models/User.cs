@@ -13,12 +13,13 @@ namespace WebHttpClient.Models
         public string Password { get; set; }
         public DateTime RegisteredDate { get; set; }
 
+        public int UserStatus { get; set; }
 
         // Navigation props
 
         public List<Post> Posts { get; set; }
 
-        public int UserStatus { get; set; }
+        public List<Answer> Answers { get; set; }
 
     }
 }

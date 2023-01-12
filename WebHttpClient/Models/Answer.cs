@@ -16,8 +16,7 @@ namespace WebHttpClient.Models
         public int PostId { get; set; }
         public Post ReferToPost { get; set; }
         public int UserId { get; set; }
-        public User FromUser { get; set; }
-
+        public User AnswerFromUser { get; set; }
 
     }
 }
