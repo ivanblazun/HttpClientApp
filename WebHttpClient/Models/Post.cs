@@ -21,7 +21,8 @@ namespace WebHttpClient.Models
 
         //public int ThemeId { get; set; }
         //public Theme Theme { get; set; }
-        //public List<Answer> Answers { get; set; }
+        public int AnswerId { get; set; }
+        public List<Answer> Answers { get; set; }
 
     }
 }
