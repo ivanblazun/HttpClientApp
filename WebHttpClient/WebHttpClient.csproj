@@ -186,6 +186,10 @@
     <Compile Include="Migrations\202301100438501_UserAddedPasswordAndDate.Designer.cs">
       <DependentUpon>202301100438501_UserAddedPasswordAndDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202301120610254_ForumThemesAnswers.cs" />
+    <Compile Include="Migrations\202301120610254_ForumThemesAnswers.Designer.cs">
+      <DependentUpon>202301120610254_ForumThemesAnswers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Forum.cs" />
@@ -294,6 +298,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202301100438501_UserAddedPasswordAndDate.resx">
       <DependentUpon>202301100438501_UserAddedPasswordAndDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301120610254_ForumThemesAnswers.resx">
+      <DependentUpon>202301120610254_ForumThemesAnswers.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

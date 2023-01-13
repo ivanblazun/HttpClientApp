@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WebHttpClient.Models;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace WebHttpClient.Data
 {
@@ -22,5 +23,24 @@ namespace WebHttpClient.Data
         public DbSet<Theme> Themes { get; set; }
 
         public DbSet<Answer> Answers { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+
+            //modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+
+            //modelBuilder.Entity<Post>()
+            //   .HasRequired(f => f.Answers)
+            //   .WithRequiredDependent()
+            //   .WillCascadeOnDelete(false);
+
+            //modelBuilder.Entity<User>()
+            //   .HasRequired(f => f.Answers)
+            //   .WithRequiredDependent()
+            //   .WillCascadeOnDelete(false);
+
+        }
+
+
     }
 }
