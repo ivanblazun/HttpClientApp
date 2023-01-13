@@ -17,10 +17,8 @@ namespace WebHttpClient.Models
 
         public User User { get; set; }
 
-       
-        public List<Post> Posts { get; set; }
-
         public int ForumId { get; set; }
         public Forum Forum { get; set; }
+        public List<Post> Posts { get; set; }
     }
 }

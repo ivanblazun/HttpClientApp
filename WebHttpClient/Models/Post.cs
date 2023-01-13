@@ -19,10 +19,9 @@ namespace WebHttpClient.Models
         public int UserId { get; set; }
         public User User { get; set; }
 
-        public int ThemeId { get; set; }
-        public Theme Theme { get; set; }
-               
-        public List<Answer> Answers { get; set; }
+        //public int ThemeId { get; set; }
+        //public Theme Theme { get; set; }
+        //public List<Answer> Answers { get; set; }
 
     }
 }
