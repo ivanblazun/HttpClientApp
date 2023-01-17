@@ -9,12 +9,12 @@ namespace WebHttpClient.Migrations
         {
             //Sql("INSERT INTO UserStatus (StatusTitle,UStatus,UserId) VALUES ('User','3','3');");
 
-            Sql("INSERT INTO Fora (Name,ThemesCounter,UserCounter) VALUES ('PrviForum','0','3');");
+            //Sql("INSERT INTO Fora (Name,ThemesCounter,UserCounter) VALUES ('PrviForum','0','3');");
 
 
-            Sql("INSERT INTO Themes (Title,Value,UserId,ForumId) VALUES ('Monitori','0','1','1');");
-            Sql("INSERT INTO Themes (Title,Value,UserId,ForumId) VALUES ('Tipkovnice','0','2','1');");
-            Sql("INSERT INTO Themes (Title,Value,UserId,ForumId) VALUES ('Laptopi','0','3','1');");
+            //Sql("INSERT INTO Themes (Title,Value,UserId,ForumId) VALUES ('Monitori','0','1','3');");
+            //Sql("INSERT INTO Themes (Title,Value,UserId,ForumId) VALUES ('Tipkovnice','0','2','3');");
+            //Sql("INSERT INTO Themes (Title,Value,UserId,ForumId) VALUES ('Laptopi','0','3','3');");
 
             Sql("INSERT INTO Answers (Body,PostId,UserId) VALUES ('OdgovorNaPost1','1','1');");
             Sql("INSERT INTO Answers (Body,PostId,UserId) VALUES ('OdgovorNaPost2','2','2');");
