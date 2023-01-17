@@ -198,6 +198,14 @@
     <Compile Include="Migrations\202301160439481_forumThemesAnswersSEED.Designer.cs">
       <DependentUpon>202301160439481_forumThemesAnswersSEED.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202301160539247_AnswersSEED.cs" />
+    <Compile Include="Migrations\202301160539247_AnswersSEED.Designer.cs">
+      <DependentUpon>202301160539247_AnswersSEED.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202301160544280_PostsUpdate.cs" />
+    <Compile Include="Migrations\202301160544280_PostsUpdate.Designer.cs">
+      <DependentUpon>202301160544280_PostsUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Forum.cs" />
@@ -315,6 +323,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202301160439481_forumThemesAnswersSEED.resx">
       <DependentUpon>202301160439481_forumThemesAnswersSEED.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301160539247_AnswersSEED.resx">
+      <DependentUpon>202301160539247_AnswersSEED.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301160544280_PostsUpdate.resx">
+      <DependentUpon>202301160544280_PostsUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

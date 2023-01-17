@@ -24,7 +24,7 @@ namespace WebHttpClient.Models
 
         //[ForeignKey("UserProfile")]
         //public int UserProfileId { get; set; }
-        public UserProfile UserProfile { get; set; }
+        //public UserProfile UserProfile { get; set; }
 
     }
 }
