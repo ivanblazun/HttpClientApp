@@ -24,6 +24,7 @@ namespace WebHttpClient.Controllers
 
         // POSt Create and register new user
         [HttpPost]
+        [Route ("api/sqluser/registeruser")]
         public HttpResponseMessage RegisterUser([FromBody] User newUser)
         {
 
@@ -99,10 +100,64 @@ namespace WebHttpClient.Controllers
                    return response.CreateResponse(HttpStatusCode.Unauthorized);
                 }
                 
-            }
-
-            
+            }           
         }
+        // POST Search for user profile ///
+        [HttpPost]
+        [Route("api/sqluser/getuserfullprofile")]
+        public HttpResponseMessage GetUserFullProfile(HttpRequestMessage httpRequest, [FromBody] UserProfile requestedProfile)
+        {
+            bool doesUserProfileExist = appDbContext.UserProfiles
+                .Where(u => u.FirstName == requestedProfile.FirstName || u.LastName == requestedProfile.LastName).Any();
+
+            var userProfile = appDbContext.UserProfiles
+                .Where(u => u.FirstName == requestedProfile.FirstName || u.LastName == requestedProfile.LastName).FirstOrDefault();
+
+            var response = new HttpResponseMessage();
+
+            if (httpRequest.Headers.Authorization == null)
+            {
+                response = Request.CreateResponse(HttpStatusCode.Unauthorized, "You have to be registered");
+                              
+                return response;
+            }
+            else
+            {
+                string authToken = httpRequest.Headers.Authorization.Parameter;
+
+                string decodedauthtoken = Encoding.UTF8.GetString(Convert.FromBase64String(authToken));
+
+                string[] usernamePasswordArray = decodedauthtoken.Split(':');
+
+                string username = usernamePasswordArray[0];
+
+                string password = usernamePasswordArray[1];
+
+                if (UserSecurityAuth.Login(username, password))
+                {
+                    if (!doesUserProfileExist)
+                    {
+                        response =Request.CreateResponse(HttpStatusCode.NotFound,"Searched user does not have profile created yet");
+
+                        return response;
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.Accepted, userProfile);
+
+                        return response;
+                    }
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.Unauthorized, "You have to be registered");
+
+                    return response;
+                }
+
+            }
+        }
+       
 
     }
 }
