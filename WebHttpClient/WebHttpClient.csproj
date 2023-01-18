@@ -206,6 +206,14 @@
     <Compile Include="Migrations\202301160544280_PostsUpdate.Designer.cs">
       <DependentUpon>202301160544280_PostsUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202301170507279_UserProfileUserRelation.cs" />
+    <Compile Include="Migrations\202301170507279_UserProfileUserRelation.Designer.cs">
+      <DependentUpon>202301170507279_UserProfileUserRelation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202301170511591_UserProfileSEED.cs" />
+    <Compile Include="Migrations\202301170511591_UserProfileSEED.Designer.cs">
+      <DependentUpon>202301170511591_UserProfileSEED.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Forum.cs" />
@@ -329,6 +337,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202301160544280_PostsUpdate.resx">
       <DependentUpon>202301160544280_PostsUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301170507279_UserProfileUserRelation.resx">
+      <DependentUpon>202301170507279_UserProfileUserRelation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301170511591_UserProfileSEED.resx">
+      <DependentUpon>202301170511591_UserProfileSEED.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
