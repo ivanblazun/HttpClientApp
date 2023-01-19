@@ -214,6 +214,10 @@
     <Compile Include="Migrations\202301170511591_UserProfileSEED.Designer.cs">
       <DependentUpon>202301170511591_UserProfileSEED.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202301190424031_addFKfromUserprofileToUser.cs" />
+    <Compile Include="Migrations\202301190424031_addFKfromUserprofileToUser.Designer.cs">
+      <DependentUpon>202301190424031_addFKfromUserprofileToUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Forum.cs" />
@@ -343,6 +347,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202301170511591_UserProfileSEED.resx">
       <DependentUpon>202301170511591_UserProfileSEED.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301190424031_addFKfromUserprofileToUser.resx">
+      <DependentUpon>202301190424031_addFKfromUserprofileToUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

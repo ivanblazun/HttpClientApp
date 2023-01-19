@@ -174,8 +174,7 @@ namespace WebHttpClient.Controllers
             bool isCurrentUser = appDbContext.Users
                 .Where(u => u.Id == user.Id).Any();
 
-            //bool doesUserOwnProfile = appDbContext.UserProfiles.Where(uP=>uP.)
-
+            bool doesUserOwnProfile = appDbContext.UserProfiles.Where(uP => uP.UserId == user.Id).Any();
 
             var response = new HttpResponseMessage();
 
