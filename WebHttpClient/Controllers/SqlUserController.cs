@@ -64,7 +64,7 @@ namespace WebHttpClient.Controllers
             }           
         }
 
-        // POST Login user ///
+        // POST Login user 
         [HttpPost]
         [Route("api/sqluser/loginuser")]
         public HttpResponseMessage LoginUser(HttpRequestMessage httpRequest) 
@@ -102,7 +102,9 @@ namespace WebHttpClient.Controllers
                 
             }           
         }
-        // POST Search for user profile ///
+
+
+        // POST Search for user profile 
         [HttpPost]
         [Route("api/sqluser/getuserfullprofile")]
         public HttpResponseMessage GetUserFullProfile(HttpRequestMessage httpRequest, [FromBody] UserProfile requestedProfile)
@@ -157,7 +159,76 @@ namespace WebHttpClient.Controllers
 
             }
         }
-       
+
+        // POST Create user profile
+        [HttpPost]
+        [Route("api/sqluser/createuserprofile")]
+        public HttpResponseMessage CreateUserProfile(HttpRequestMessage httpRequest,[FromBody] User user, [FromBody] UserProfile createdProfile)
+        {
+            bool doesUserProfileExist = appDbContext.UserProfiles
+                .Where(u => u.Id==createdProfile.Id).Any();
+
+            var userProfile = appDbContext.UserProfiles
+                .Where(u => u.FirstName == createdProfile.FirstName || u.LastName == createdProfile.LastName).FirstOrDefault();
+
+            bool isCurrentUser = appDbContext.Users
+                .Where(u => u.Id == user.Id).Any();
+
+            //bool doesUserOwnProfile = appDbContext.UserProfiles.Where(uP=>uP.)
+
+
+            var response = new HttpResponseMessage();
+
+            UserProfile newProfile = new UserProfile();
+            
+            if (httpRequest.Headers.Authorization == null)
+            {
+                response = Request.CreateResponse(HttpStatusCode.Unauthorized, "You have to be registered");
+
+                return response;
+            }
+            else
+            {
+                string authToken = httpRequest.Headers.Authorization.Parameter;
+
+                string decodedauthtoken = Encoding.UTF8.GetString(Convert.FromBase64String(authToken));
+
+                string[] usernamePasswordArray = decodedauthtoken.Split(':');
+
+                string username = usernamePasswordArray[0];
+
+                string password = usernamePasswordArray[1];
+
+                if (UserSecurityAuth.Login(username, password))
+                {
+                    if (!doesUserProfileExist && isCurrentUser)
+                    {
+                        newProfile = createdProfile;
+
+                        appDbContext.UserProfiles.Add(newProfile);
+
+                        appDbContext.SaveChanges();
+
+                        response = Request.CreateResponse(HttpStatusCode.Accepted, newProfile);
+
+                        return response;
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.NotFound, "Searched user does not have profile created yet");
+
+                        return response;
+                    }
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.Unauthorized, "You have to be registered");
+
+                    return response;
+                }
+
+            }
+        }
 
     }
 }
