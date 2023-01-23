@@ -61,7 +61,6 @@ namespace WebHttpClient.Controllers
         //GET BY ID api/sql/GetByTitle?title={}
         [Route ("api/sql/GetByTitle")]
         [HttpGet]
-        
         public string GetByTitle([FromBody] User user, [FromUri] string title)
         {
 

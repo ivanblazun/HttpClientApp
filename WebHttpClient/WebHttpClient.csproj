@@ -164,6 +164,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SqlAdminController.cs" />
     <Compile Include="Controllers\SqlController.cs" />
+    <Compile Include="Controllers\SqlForumCallsController.cs" />
     <Compile Include="Controllers\SqlUserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Data\AppDbContext.cs" />
@@ -217,6 +218,10 @@
     <Compile Include="Migrations\202301190424031_addFKfromUserprofileToUser.cs" />
     <Compile Include="Migrations\202301190424031_addFKfromUserprofileToUser.Designer.cs">
       <DependentUpon>202301190424031_addFKfromUserprofileToUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202301212323437_addThemeIdAndFKToPosts.cs" />
+    <Compile Include="Migrations\202301212323437_addThemeIdAndFKToPosts.Designer.cs">
+      <DependentUpon>202301212323437_addThemeIdAndFKToPosts.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
@@ -350,6 +355,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202301190424031_addFKfromUserprofileToUser.resx">
       <DependentUpon>202301190424031_addFKfromUserprofileToUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301212323437_addThemeIdAndFKToPosts.resx">
+      <DependentUpon>202301212323437_addThemeIdAndFKToPosts.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
