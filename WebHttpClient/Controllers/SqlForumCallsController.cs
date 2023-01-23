@@ -84,7 +84,7 @@ namespace WebHttpClient.Controllers
                                              PostBody=posts.Body,
                                              PostValue = posts.Value,
                                              PostUserId = posts.UserId,
-                                             //PostAnswers=posts.Answers,
+                                             PostAnswers=posts.Answers,
                                              Post_From_ThemeTitle= requestedTheme.Title,
                                              ThemeId= requestedTheme.Id
                                          });
