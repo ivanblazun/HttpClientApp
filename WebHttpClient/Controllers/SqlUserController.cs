@@ -21,7 +21,6 @@ namespace WebHttpClient.Controllers
 
         public AppDbContext appDbContext = new AppDbContext();
 
-
         // POSt Create and register new user
         [HttpPost]
         [Route("api/sqluser/registeruser")]
@@ -326,5 +325,22 @@ namespace WebHttpClient.Controllers
 
             }
         }
+
+
+        // Login via JWt
+        [HttpGet]
+        [Route ("api/sqluser/validlogin")]
+        public HttpResponseMessage ValidLogin(string userName, string userPassword)
+        {
+            if(userName=="admin"&& userPassword=="admin")
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, value: TokemManager.GenerateToken(userName));
+            }
+            else 
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadGateway, message: "User name or password are invalid");
+            }
+        }
+
     }    
 }
