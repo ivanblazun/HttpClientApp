@@ -327,7 +327,7 @@ namespace WebHttpClient.Controllers
         }
 
 
-        // Login via JWt
+        // Login via JWt V1
         [HttpGet]
         [Route ("api/sqluser/validlogin")]
         public HttpResponseMessage ValidLogin(string userName, string userPassword)
@@ -342,5 +342,41 @@ namespace WebHttpClient.Controllers
             }
         }
 
+        [Authorize]
+        // Login via JWt V2
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("api/sqluser/validlogin2")]
+        public HttpResponseMessage ValidLogin2(User user)
+        {
+            if (user.UserName == "admin" && user.Password == "admin") 
+            {
+                 var token = TokemManager.CreateJWT(user);
+
+                return Request.CreateResponse(HttpStatusCode.Accepted, token);
+            }
+
+            return Request.CreateErrorResponse(HttpStatusCode.BadGateway,"User name or password are invalid");
+          
+        }
+        
+        [HttpGet]
+        [Route("api/sqluser/validlogin2")]
+        public HttpResponseMessage ValidLoginSuccess()
+        {
+                    
+            return Request.CreateResponse(HttpStatusCode.OK,"Success login as user");
+            
+        }
+
+        [Authorize(Roles ="1")]
+        [HttpGet]
+        [Route("api/sqluser/adminvalidlogin2")]
+        public HttpResponseMessage AdminValidLoginSuccess()
+        {
+
+            return Request.CreateResponse(HttpStatusCode.OK, "Success login as admin");
+
+        }
     }    
 }
