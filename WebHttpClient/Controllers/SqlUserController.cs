@@ -6,12 +6,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Principal;
 using System.Text;
 using System.Web;
 using System.Web.Http;
 using WebHttpClient.Data;
 using WebHttpClient.Models;
 using WebHttpClient.UserSecurity;
+
 
 namespace WebHttpClient.Controllers
 {
@@ -175,12 +177,7 @@ namespace WebHttpClient.Controllers
         [Route("api/sqluser/updateuserfullprofile/{userId}")]
         public HttpResponseMessage UpdateUserProfile(HttpRequestMessage httpRequest, int userId, [FromBody] UserProfile updatedProfile)
         {
-            // radi sto bi trebao ali netreba, neka ostane za nedaj bože
-            bool doesUserProfileExist = appDbContext.UserProfiles
-                .Where(u => u.Id == updatedProfile.Id)
-                .Any();
-
-
+       
             var response = new HttpResponseMessage();
 
             UserProfile newUpdatedProfile = new UserProfile();
@@ -193,76 +190,37 @@ namespace WebHttpClient.Controllers
             }
             else
             {
-        
-                if (true)
+
+                bool doesUserOwnProfile = appDbContext.UserProfiles.Any(uP => uP.UserId == updatedProfile.UserId);
+
+         
+
+                if (doesUserOwnProfile)
                 {
-                    if (!doesUserProfileExist)
-                    {
+                    var searchedProfile = appDbContext.UserProfiles.Where(uP => uP.Id == updatedProfile.Id).FirstOrDefault();
 
 
-                        bool userProfile = appDbContext.UserProfiles
-                             .Any(u => u.UserId == userId);
-
-                 
-
-                        if (userProfile)
-                        {
-                            var searchedProfile = appDbContext.UserProfiles.Where(uP => uP.Id == updatedProfile.Id).First<UserProfile>();
+                    searchedProfile.FirstName = updatedProfile.FirstName;
+                    searchedProfile.LastName = updatedProfile.LastName;
+                    searchedProfile.Avatar = updatedProfile.Avatar;
+                    searchedProfile.AboutMyself = updatedProfile.AboutMyself;
 
 
-                            searchedProfile.FirstName = updatedProfile.FirstName;
-                            searchedProfile.LastName = updatedProfile.LastName;
-                            searchedProfile.Avatar = updatedProfile.Avatar;
-                            searchedProfile.AboutMyself = updatedProfile.AboutMyself;
+                    appDbContext.SaveChanges();
 
-
-                            appDbContext.SaveChanges();
-
-                            response = Request.CreateResponse(HttpStatusCode.Accepted, newUpdatedProfile);
-
-                            return response;
-                        }
-                        else
-                        {
-                            response = Request.CreateResponse(HttpStatusCode.NotFound, "You alredy have profile created, maybe update?");
-
-                            return response;
-
-                        }
-
-                    }
-                    else
-                    {
-                        response = Request.CreateResponse(HttpStatusCode.NotFound, "You alredy have profile created, maybe update?");
-
-                        return response;
-                    }
-                }
-                else
-                {
-                    response = Request.CreateResponse(HttpStatusCode.Unauthorized, "You have to be registered");
+                    response = Request.CreateResponse(HttpStatusCode.Accepted, newUpdatedProfile);
 
                     return response;
                 }
 
-            }
-        }
 
+            }
 
-        // Login user via JWt V1
-        [HttpGet]
-        [Route ("api/sqluser/validlogin")]
-        public HttpResponseMessage ValidLogin(string userName, string userPassword)
-        {
-            if(userName=="admin"&& userPassword=="admin")
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, value: TokemManager.GenerateToken(userName));
-            }
-            else 
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadGateway, message: "User name or password are invalid");
-            }
+            return null;
+
         }
+        
+
 
         [Authorize]
         //Request login via JWt V2, also "Userstatus" value is required in request body (1=user,2=powerUser,3=admin)

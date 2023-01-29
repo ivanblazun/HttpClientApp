@@ -20,39 +20,6 @@ namespace WebHttpClient.UserSecurity
 
         private static string Secret = "123h21bcde012t45abjde1623fg9bcde";
 
-        // JWT V1
-        public static string GenerateToken(string userName)
-        {   
-            //key get from secret key for JWT
- 
-
-            byte[] key = Convert.FromBase64String(Secret);
-
-
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(key);
-
-            // Decripting class 
-            SecurityTokenDescriptor decriptor = new SecurityTokenDescriptor
-            {
-            
-                Subject=new System.Security.Claims.ClaimsIdentity(claims:new[] { new Claim( type:ClaimTypes.Name,value:userName) }),
-
-                Expires=DateTime.UtcNow.AddDays(20),
-
-                SigningCredentials=new SigningCredentials(securityKey,
-                algorithm:SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            // Handler that create JWt from hashed secret key
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-
-            // Actual token created by handler
-            JwtSecurityToken token = handler.CreateJwtSecurityToken(decriptor);
-
-            // Returned token
-            return handler.WriteToken(token);
-        }
-
 
 
         // JWT V2 Create Token 
@@ -62,7 +29,7 @@ namespace WebHttpClient.UserSecurity
             var claims = new List<Claim>();
 
             claims.Add(new Claim(ClaimTypes.Name, user.UserName));
-
+                       
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.UserName));
 
             claims.Add(new Claim(ClaimTypes.Role, user.UserStatus.ToString()));
@@ -108,7 +75,7 @@ namespace WebHttpClient.UserSecurity
 
                 ValidateLifetime=true
 
-            }, out var securityToken); ;
+            }, out var securityToken); 
 
             var jwt = securityToken as JwtSecurityToken;
 
