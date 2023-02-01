@@ -24,7 +24,7 @@ namespace WebHttpClient
 
         protected void Application_AuthenticateRequest()
         {
-            CuuUser.GetCurrUser();
+            //CuuUser.GetCurrUser();
 
             TokemManager.AuthenticateUser();
         }

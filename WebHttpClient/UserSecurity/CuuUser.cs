@@ -9,21 +9,25 @@ namespace WebHttpClient.UserSecurity
 {
     public class CuuUser 
     {
-        public static void GetCurrUser()
+        public static string GetCurrUser()
         {
             try
             {
-                var token = HttpContext.Current.Request.Headers.Get("Authorization");
+                //var token = HttpContext.Current.Request.Headers.Get("Authorization");
 
+                ClaimsPrincipal.Current.Identities.First().Claims.ToList();
+                                
 
+                var claims = ClaimsPrincipal.Current.Identities.First().Claims.ToList();
 
-                var cU = HttpContext.Current.User;
+                //Filter specific claim    
+              var c= claims?.FirstOrDefault(x => x.Type.Equals("nameId", StringComparison.OrdinalIgnoreCase))?.Value;
 
- 
-
+                return c;
             }
             catch { }
 
+            return null;
         }
     }
 }

@@ -174,8 +174,8 @@ namespace WebHttpClient.Controllers
         // PUT Update user profile
         [Authorize]
         [HttpPut]
-        [Route("api/sqluser/updateuserfullprofile/{userId}")]
-        public HttpResponseMessage UpdateUserProfile(HttpRequestMessage httpRequest, int userId, [FromBody] UserProfile updatedProfile)
+        [Route("api/sqluser/updateuserfullprofile/{profileId}")]
+        public HttpResponseMessage UpdateUserProfile(HttpRequestMessage httpRequest, int profileId, [FromBody] UserProfile updatedProfile)
         {
        
             var response = new HttpResponseMessage();
@@ -191,13 +191,19 @@ namespace WebHttpClient.Controllers
             else
             {
 
-                bool doesUserOwnProfile = appDbContext.UserProfiles.Any(uP => uP.UserId == updatedProfile.UserId);
+                var cU = CuuUser.GetCurrUser();
+
+                var currentUser = appDbContext.Users.Where(u => u.UserName == cU).FirstOrDefault();
+
+                var requestedProfile = appDbContext.UserProfiles.Where(uP => uP.Id == profileId).FirstOrDefault();
+
+                bool doesUserOwnProfile = appDbContext.UserProfiles.Any(uP => uP.UserId == currentUser.Id && requestedProfile.UserId==currentUser.Id);
 
          
 
                 if (doesUserOwnProfile)
                 {
-                    var searchedProfile = appDbContext.UserProfiles.Where(uP => uP.Id == updatedProfile.Id).FirstOrDefault();
+                    var searchedProfile = appDbContext.UserProfiles.Where(uP => uP.Id == profileId).FirstOrDefault();
 
 
                     searchedProfile.FirstName = updatedProfile.FirstName;
@@ -208,7 +214,7 @@ namespace WebHttpClient.Controllers
 
                     appDbContext.SaveChanges();
 
-                    response = Request.CreateResponse(HttpStatusCode.Accepted, newUpdatedProfile);
+                    response = Request.CreateResponse(HttpStatusCode.Accepted, searchedProfile);
 
                     return response;
                 }
@@ -216,7 +222,9 @@ namespace WebHttpClient.Controllers
 
             }
 
-            return null;
+            response = Request.CreateResponse(HttpStatusCode.Unauthorized, "You have to be owner of profile to update profile");
+
+            return response;
 
         }
         
