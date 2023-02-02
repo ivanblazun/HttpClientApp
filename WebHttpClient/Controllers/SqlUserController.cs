@@ -38,15 +38,15 @@ namespace WebHttpClient.Controllers
             string userName = newUser.UserName.ToString();
 
             string password = newUser.Password.ToString();
-                        
+
             string email = newUser.Email.ToString();
 
             DateTime dateTime = DateTime.Now;
-                       
+
             List<string> resp = new List<string> { userName, password, email, dateTime.ToString() };
 
             if (!doesUserExist)
-            {   
+            {
 
                 User registerUser = newUser;
 
@@ -71,7 +71,7 @@ namespace WebHttpClient.Controllers
                 return response;
             }
         }
-           
+
         // POST View other users profile
         [Authorize]
         [HttpPost]
@@ -93,19 +93,19 @@ namespace WebHttpClient.Controllers
                 return response;
             }
             else
-            {               
-                    if (!doesUserProfileExist)
-                    {
-                        response = Request.CreateResponse(HttpStatusCode.NotFound, "Searched user does not have profile created yet");
+            {
+                if (!doesUserProfileExist)
+                {
+                    response = Request.CreateResponse(HttpStatusCode.NotFound, "Searched user does not have profile created yet");
 
-                        return response;
-                    }
-                    else
-                    {
-                        response = Request.CreateResponse(HttpStatusCode.Accepted, userProfile);
+                    return response;
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.Accepted, userProfile);
 
-                        return response;
-                    }
+                    return response;
+                }
             }
 
         }
@@ -162,13 +162,66 @@ namespace WebHttpClient.Controllers
                 }
                 else
                 {
-                     response = Request.CreateResponse(HttpStatusCode.NotFound, "You alredy have profile created, maybe update?");
+                    response = Request.CreateResponse(HttpStatusCode.NotFound, "You alredy have profile created, maybe update?");
 
                     return response;
                 }
-           
-        
+
+
             }
+        }
+
+        //GET Get users own full profile
+        [Authorize]
+        [HttpGet]
+        [Route("api/sqluser/getspecificfullprofile/{userId}")]
+        public HttpResponseMessage GetSpecificFullProfile(HttpRequestMessage httpRequest, int userId)
+        {
+            var response = new HttpResponseMessage();
+            UserProfile newUpdatedProfile = new UserProfile();
+
+            if (httpRequest.Headers.Authorization == null)
+            {
+                response = Request.CreateResponse(HttpStatusCode.Unauthorized, "You have to be registered user to view profile");
+                return response;
+            }
+            else
+            {
+                var cU = CuuUser.GetCurrUser();
+
+                var currentUser = appDbContext.Users.Where(u => u.UserName == cU).FirstOrDefault();
+
+                var searchedProfile = appDbContext.UserProfiles.Where(uP => uP.UserId == userId).FirstOrDefault();
+
+                bool doesUserOwnProfile = appDbContext.UserProfiles.Any(uP => uP.UserId == currentUser.Id && searchedProfile.UserId == currentUser.Id);
+
+                if (doesUserOwnProfile)
+                {
+                    var joinedUserProfileOnUser = (from user in appDbContext.Users
+                                                   join userprofile in appDbContext.UserProfiles on currentUser.Id equals searchedProfile.UserId
+                                                   select new
+                                                   {
+                                                       currentUser.Id,
+                                                       currentUser.UserName,
+                                                       searchedProfile.FirstName,
+                                                       searchedProfile.LastName,
+                                                       searchedProfile.AboutMyself,
+                                                       searchedProfile.Avatar,
+                                                       currentUser.UserStatus,
+                                                       currentUser.Email,
+                                                       currentUser.Password,
+                                                       currentUser.RegisteredDate,
+                                                   }).Take(1);
+
+
+                    response = Request.CreateResponse(HttpStatusCode.Accepted, joinedUserProfileOnUser);
+
+                    return response;
+                }
+            }
+            response = Request.CreateResponse(HttpStatusCode.Unauthorized, "You have to be owner of profile to view full profile");
+
+            return response;
         }
 
         // PUT Update user profile
@@ -177,15 +230,12 @@ namespace WebHttpClient.Controllers
         [Route("api/sqluser/updateuserfullprofile/{profileId}")]
         public HttpResponseMessage UpdateUserProfile(HttpRequestMessage httpRequest, int profileId, [FromBody] UserProfile updatedProfile)
         {
-       
             var response = new HttpResponseMessage();
-
             UserProfile newUpdatedProfile = new UserProfile();
 
             if (httpRequest.Headers.Authorization == null)
             {
                 response = Request.CreateResponse(HttpStatusCode.Unauthorized, "You have to be registered user to update or create your profile");
-
                 return response;
             }
             else
@@ -197,20 +247,16 @@ namespace WebHttpClient.Controllers
 
                 var requestedProfile = appDbContext.UserProfiles.Where(uP => uP.Id == profileId).FirstOrDefault();
 
-                bool doesUserOwnProfile = appDbContext.UserProfiles.Any(uP => uP.UserId == currentUser.Id && requestedProfile.UserId==currentUser.Id);
-
-         
+                bool doesUserOwnProfile = appDbContext.UserProfiles.Any(uP => uP.UserId == currentUser.Id && requestedProfile.UserId == currentUser.Id);
 
                 if (doesUserOwnProfile)
                 {
                     var searchedProfile = appDbContext.UserProfiles.Where(uP => uP.Id == profileId).FirstOrDefault();
 
-
                     searchedProfile.FirstName = updatedProfile.FirstName;
                     searchedProfile.LastName = updatedProfile.LastName;
                     searchedProfile.Avatar = updatedProfile.Avatar;
                     searchedProfile.AboutMyself = updatedProfile.AboutMyself;
-
 
                     appDbContext.SaveChanges();
 
@@ -218,16 +264,12 @@ namespace WebHttpClient.Controllers
 
                     return response;
                 }
-
-
             }
-
             response = Request.CreateResponse(HttpStatusCode.Unauthorized, "You have to be owner of profile to update profile");
 
             return response;
-
         }
-        
+
 
 
         [Authorize]
@@ -237,7 +279,7 @@ namespace WebHttpClient.Controllers
         [Route("api/sqluser/validlogin2")]
         public HttpResponseMessage ValidLogin2(User user)
         {
-            bool isUser = appDbContext.Users.Any(u => u.UserName == user.UserName && u.Password == user.Password && u.UserStatus ==user.UserStatus);
+            bool isUser = appDbContext.Users.Any(u => u.UserName == user.UserName && u.Password == user.Password && u.UserStatus == user.UserStatus);
 
             if (isUser)
             {
@@ -245,12 +287,12 @@ namespace WebHttpClient.Controllers
 
                 return Request.CreateResponse(HttpStatusCode.Accepted, token);
             }
-            else 
+            else
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadGateway,"User name or password are invalid");
+                return Request.CreateErrorResponse(HttpStatusCode.BadGateway, "User name or password are invalid");
             }
 
-          
+
         }
 
         //Login as user with token
@@ -270,13 +312,13 @@ namespace WebHttpClient.Controllers
         [Route("api/sqluser/poweruservalidlogin2")]
         public HttpResponseMessage powerUserValidLoginSuccess()
         {
-                    
-            return Request.CreateResponse(HttpStatusCode.OK,"Success login as user");
-            
+
+            return Request.CreateResponse(HttpStatusCode.OK, "Success login as user");
+
         }
 
         // Login as admin with token
-        [Authorize(Roles ="1")]
+        [Authorize(Roles = "1")]
         [HttpGet]
         [Route("api/sqluser/adminvalidlogin2")]
         public HttpResponseMessage AdminValidLoginSuccess()
@@ -285,5 +327,5 @@ namespace WebHttpClient.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, "Success login as admin");
 
         }
-    }    
+    }
 }

@@ -80,9 +80,7 @@ namespace WebHttpClient.Controllers
         public HttpResponseMessage UpdateUser([FromBody] User updatedUser) 
         {
             HttpRequestMessage httpRequest = new HttpRequestMessage();
-
-            //string userIsAdmin = httpRequest.Headers.Authorization.Parameter;
-
+                  
             bool doesUserExist = appDbContext.Users.Where(u => u.Id == updatedUser.Id).Any();
 
 
