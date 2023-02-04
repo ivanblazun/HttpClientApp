@@ -19,66 +19,76 @@ namespace WebHttpClient.Controllers
         public AppDbContext appDbContext = new AppDbContext();
 
 
-        // GET Get all posts from user id api/sql
+        // GET Get all posts from user id api/sql/1
         [HttpGet]
-        public List<string> Get([FromBody] User user)
+        [Route("api/sql/getallpostfromuser/{userId}")]
+        public HttpResponseMessage GetAllPostFromUser(int userId)
         {
+            HttpResponseMessage response = new HttpResponseMessage();
 
-            List<string> allPosts = new List<string>();
-
-            var selectedPosts = appDbContext.Posts.Where(i => i.UserId == user.Id);
+            var selectedPosts = appDbContext.Posts.Where(i => i.UserId == userId);
 
             var help = JsonConvert.SerializeObject(selectedPosts);
 
-            allPosts.Add(help);
+            response = Request.CreateResponse(HttpStatusCode.OK, selectedPosts);
 
-            return allPosts;
+            return response;
         }
 
         //GET Get post by id from user id api/sql/GetById/5
-        [Route("api/sql/CallById")]
+        [Route("api/sql/getspecpostfromuser/{postId}")]
         [HttpGet]
-        public string CallById([FromBody] User user, [FromUri] int id)
+        public HttpResponseMessage GetSpecPostFromUser([FromBody] User user, [FromUri] int postId)
         {
+            HttpResponseMessage response = new HttpResponseMessage();
 
-            var selectedPosts = appDbContext.Posts.Where(i => i.UserId == user.Id);
+            bool doesPostExist = appDbContext.Posts.Any(i => i.UserId == user.Id && i.Id == postId);
 
-            string deserializedPost = "";
+            var selectedPost = appDbContext.Posts.Where(i => i.UserId == user.Id && i.Id == postId);
 
-            var selPost = selectedPosts.Where(i => i.Id == id);
+            if (doesPostExist)
+            {
+                response = Request.CreateResponse(HttpStatusCode.OK, selectedPost);
+                return response;
+            }
+            else
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "Post not found");
+                return response;
+            }
 
-            return JsonConvert.SerializeObject(selPost);
-
-            deserializedPost = selPost.ToString();
-
-            return deserializedPost;
         }
 
-        //GET BY ID api/sql/GetByTitle?title={}
-        [Route("api/sql/GetByTitle")]
+        //GET BY ID api/sql/GetByTitle?title={title}
+        [Route("api/sql/getpostbytitle")]
         [HttpGet]
-        public string GetByTitle([FromBody] User user, [FromUri] string title)
+        public HttpResponseMessage GetPostByTitle([FromUri] string title)
         {
+            HttpResponseMessage response = new HttpResponseMessage();
 
-            var selectedPosts = appDbContext.Posts.Where(i => i.UserId == user.Id);
+            bool doesPostExist = appDbContext.Posts.Any(i => i.Title == title);
 
-            string deserializedPost = "";
+            var selectedPosts = appDbContext.Posts.Where(i => i.Title == title);
 
-            var selPost = selectedPosts.Where(i => i.Title == title);
+            if (doesPostExist)
+            {
+                response = Request.CreateResponse(HttpStatusCode.OK, selectedPosts);
+                return response;
+            }
+            else
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "Post does not exist");
+                return response;
+            }
 
-            return JsonConvert.SerializeObject(selPost);
-
-            deserializedPost = selPost.ToString();
-
-            return deserializedPost;
         }
 
         //POST Create new post api/sql
+        [Authorize]
         [HttpPost]
         [Route("api/sql/makenewpost")]
         public HttpResponseMessage MakeNewPost([FromBody] Post sendInput, HttpRequestMessage httpRequest)
         {
-
             var response = new HttpResponseMessage();
 
             if (httpRequest.Headers.Authorization == null)
@@ -91,24 +101,17 @@ namespace WebHttpClient.Controllers
             else
             {
                 // auth procedure
-                string authToken = httpRequest.Headers.Authorization.Parameter;
+                var cU = CuuUser.GetCurrUser();
+                var currentUser = appDbContext.Users.Where(u => u.UserName == cU).FirstOrDefault();
 
-                string decodedauthtoken = Encoding.UTF8.GetString(Convert.FromBase64String(authToken));
-
-                string[] usernamePasswordArray = decodedauthtoken.Split(':');
-
-                string username = usernamePasswordArray[0];
-
-                string password = usernamePasswordArray[1];
-
-                if (UserSecurityAuth.Login(username, password))
+                if (currentUser != null)
                 {
                     var SendNewPostData = new Models.Post
                     {
                         Title = sendInput.Title,
                         Body = sendInput.Body,
                         Value = sendInput.Value,
-                        UserId = sendInput.UserId,
+                        UserId = currentUser.Id,
                         ThemeId = sendInput.ThemeId
                     };
 
@@ -126,13 +129,13 @@ namespace WebHttpClient.Controllers
         }
 
         // PUT Update post api/sql/updatepost/5
+        [Authorize]
         [HttpPut]
-        [Route("api/sql/updatepost/{id}")]
-        public HttpResponseMessage UpdatePost(int id, [FromBody] Post updateInput, HttpRequestMessage httpRequest)
+        [Route("api/sql/updatepost/{postid}")]
+        public HttpResponseMessage UpdatePost(int postid, [FromBody] Post updateInput, HttpRequestMessage httpRequest)
         {
             var response = new HttpResponseMessage();
 
-            bool doesPostExist = appDbContext.Posts.Any(p => p.Id == id);
 
             if (httpRequest.Headers.Authorization == null)
             {
@@ -143,40 +146,33 @@ namespace WebHttpClient.Controllers
             else
             {
                 // auth procedure
-                string authToken = httpRequest.Headers.Authorization.Parameter;
 
-                string decodedauthtoken = Encoding.UTF8.GetString(Convert.FromBase64String(authToken));
+                var cU = CuuUser.GetCurrUser();
+                var currentUser = appDbContext.Users.Where(u => u.UserName == cU).FirstOrDefault();
 
-                string[] usernamePasswordArray = decodedauthtoken.Split(':');
+                var requestedPost = appDbContext.Posts.Where(p => p.Id == postid).FirstOrDefault();
 
-                string username = usernamePasswordArray[0];
+                bool doesPostExist = appDbContext.Posts.Any(p => p.Id == postid);
 
-                string password = usernamePasswordArray[1];
+                bool doesUserOwnPost = appDbContext.Posts.Any(p => p.UserId == currentUser.Id && requestedPost.UserId == currentUser.Id);
 
-                if (UserSecurityAuth.Login(username, password) && doesPostExist)
+                bool doesPostBelogToTheme = requestedPost.ThemeId == updateInput.ThemeId;
+
+                if (doesUserOwnPost && doesPostExist && doesPostBelogToTheme)
                 {
-                    var requestedPost = appDbContext.Posts.Where(i => i.Id == id).FirstOrDefault();
+                    requestedPost.Title = updateInput.Title;
+                    requestedPost.Body = updateInput.Body;
+                    requestedPost.Value = updateInput.Value;
 
-                    var UserRequester = appDbContext.Users.Where(u => u.UserName == username && u.Password == password).FirstOrDefault();
+                    appDbContext.SaveChanges();
 
-                    bool isUserOwner = appDbContext.Posts.Any(p => p.UserId == UserRequester.Id);
+                    response = Request.CreateResponse(HttpStatusCode.OK, requestedPost);
 
-                    if (requestedPost != null && isUserOwner)
-                    {
-                        requestedPost.Title = updateInput.Title;
-                        requestedPost.Body = updateInput.Body;
-                        requestedPost.Value = updateInput.Value;
-
-                        appDbContext.SaveChanges();
-
-                        response = Request.CreateResponse(HttpStatusCode.OK, "Post updated");
-
-                        return response;
-                    }
+                    return response;
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.Forbidden, "You have to be owner of post to update post");
+                    response = Request.CreateResponse(HttpStatusCode.Forbidden, "You have to be owner of post to update post or post dont belog to theme");
 
                     return response;
                 }
@@ -188,13 +184,12 @@ namespace WebHttpClient.Controllers
 
 
         // DELETE Delete Post api/sql/5
+        [Authorize]
         [HttpDelete]
-        [Route("api/sql/deletepost/{id}")]
-        public HttpResponseMessage DeletePost(int id, HttpRequestMessage httpRequest)
+        [Route("api/sql/deletepost/{postid}")]
+        public HttpResponseMessage DeletePost(int postid, HttpRequestMessage httpRequest)
         {
             var response = new HttpResponseMessage();
-
-            bool doesPostExist = appDbContext.Posts.Any(p => p.Id == id);
 
             if (httpRequest.Headers.Authorization == null)
             {
@@ -205,43 +200,29 @@ namespace WebHttpClient.Controllers
             else
             {
                 // auth procedure
-                string authToken = httpRequest.Headers.Authorization.Parameter;
+                var cU = CuuUser.GetCurrUser();
+                var currentUser = appDbContext.Users.Where(u => u.UserName == cU).FirstOrDefault();
 
-                string decodedauthtoken = Encoding.UTF8.GetString(Convert.FromBase64String(authToken));
+                var requestedPost = appDbContext.Posts.Where(i => i.Id == postid).FirstOrDefault();
 
-                string[] usernamePasswordArray = decodedauthtoken.Split(':');
+                bool doesPostExist = appDbContext.Posts.Any(p => p.Id == postid);
 
-                string username = usernamePasswordArray[0];
+                bool doesUserOwnPost = appDbContext.Posts.Any(p => p.UserId == currentUser.Id && requestedPost.UserId == currentUser.Id);
 
-                string password = usernamePasswordArray[1];
-
-                var selectedPost = appDbContext.Posts.Where(i => i.Id == id).FirstOrDefault<Post>();
-
-                if (UserSecurityAuth.Login(username, password) && doesPostExist)
+                if (doesUserOwnPost && doesPostExist)
                 {
-                    var requestedPost = appDbContext.Posts.Where(i => i.Id == id).FirstOrDefault();
+                    appDbContext.Posts.Attach(requestedPost);
+                    appDbContext.Posts.Remove(requestedPost);
+                    appDbContext.SaveChanges();
+                    response = Request.CreateResponse(HttpStatusCode.OK, "Post deleted");
 
-                    var UserRequester = appDbContext.Users.Where(u => u.UserName == username && u.Password == password).FirstOrDefault();
+                    return response;
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.Forbidden, "You have to be owner of post to delete post");
 
-                    bool isUserOwner = appDbContext.Posts.Any(p => p.UserId == UserRequester.Id);
-
-                    if (requestedPost != null && isUserOwner)
-                    {
-
-                        appDbContext.Posts.Attach(selectedPost);
-                        appDbContext.Posts.Remove(selectedPost);
-                        appDbContext.SaveChanges();
-                        response = Request.CreateResponse(HttpStatusCode.OK, "Post deleted");
-
-                        return response;
-                    }
-                    else
-                    {
-                        response = Request.CreateResponse(HttpStatusCode.Forbidden, "You have to be owner of post to delete post");
-
-                        return response;
-                    }
-
+                    return response;
                 }
             }
             return null;
