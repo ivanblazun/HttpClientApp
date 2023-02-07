@@ -270,8 +270,6 @@ namespace WebHttpClient.Controllers
             return response;
         }
 
-
-
         [Authorize]
         //Request login via JWt V2, also "Userstatus" value is required in request body (1=user,2=powerUser,3=admin)
         [AllowAnonymous]
