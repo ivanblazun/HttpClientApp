@@ -18,9 +18,9 @@ namespace WebHttpClient.Models
 
         // Navigation props
 
-        public List<Post> Posts { get; set; }
+        //public List<Post> Posts { get; set; }
 
-        public List<Answer> Answers { get; set; }
+        //public List<Answer> Answers { get; set; }
 
         //[ForeignKey("UserProfile")]
         //public int UserProfileId { get; set; }

@@ -16,14 +16,11 @@ namespace WebHttpClient.UserSecurity
 {
     public class TokemManager
     {
-        //private static string Secret = Guid.NewGuid().ToString();
-
-        private static string Secret = "123h21bcde012t45abjde1623fg9bcde";
-
-
+  
+        static string Secret = System.Configuration.ConfigurationManager.AppSettings["Secret"];
 
         // JWT V2 Create Token 
-        public static readonly byte[] _signInKey = Encoding.UTF8.GetBytes("123h21bcde012t45abjde1623fg9bcde");
+        public static readonly byte[] _signInKey = Encoding.UTF8.GetBytes(Secret);
         public static string CreateJWT(User user ) 
         {
             var claims = new List<Claim>();

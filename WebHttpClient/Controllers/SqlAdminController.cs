@@ -79,7 +79,7 @@ namespace WebHttpClient.Controllers
         [HttpPut]
         public HttpResponseMessage UpdateSingleUser([FromBody] User updatedUser) 
         {
-            HttpRequestMessage httpRequest = new HttpRequestMessage();
+            HttpResponseMessage response = new HttpResponseMessage();
                   
             bool doesUserExist = appDbContext.Users.Where(u => u.Id == updatedUser.Id).Any();
 
@@ -96,38 +96,45 @@ namespace WebHttpClient.Controllers
 
                 user.UserName=updatedUser.UserName;
                 user.Password = updatedUser.Password;
-                user.Posts = updatedUser.Posts;
+                user.Email = updatedUser.Email;
                 user.UserStatus = updatedUser.UserStatus;
+                user.RegisteredDate = updatedUser.RegisteredDate;
+
                        
                 appDbContext.SaveChanges();
 
-                var response = httpRequest.CreateResponse(HttpStatusCode.OK,user);
+                response = Request.CreateResponse(HttpStatusCode.OK,user);
                              
                 return response;
             }
 
             else 
             {
-                var response = httpRequest.CreateResponse(HttpStatusCode.BadRequest,"User does not exist");
+                response = Request.CreateResponse(HttpStatusCode.BadRequest, "User does not exist");
 
                 return response;
             }
 
         
         }
-        // DELETE Delete single user by id from admin user api/sqladmin/DeleteSingleUser/{Id:int}
+
+        // DELETE Delete single user by id from admin user api/sqladmin/DeleteSingleUser/userId
+        [Authorize(Roles = "1")]
         [HttpDelete]
-        [Route("api/sqladmin/DeleteSingleUser/{Id:int}")]
-        public HttpResponseMessage DeleteSingleUser([FromBody] User adminUser, [FromUri] int Id)
+        [Route("api/sqladmin/deletesingleuser/{userId}")]
+        public HttpResponseMessage DeleteSingleUser(int userId)
         {
-            HttpRequestMessage httpRequest = new HttpRequestMessage();
+            HttpResponseMessage response = new HttpResponseMessage();
 
-            var isAdminUserId = appDbContext.Users.FirstOrDefault(u => u.Id == adminUser.Id) as User;
+            var cU = CuuUser.GetCurrUser();
 
+            bool userIsAdmin = appDbContext.Users.Any(u => u.UserStatus == 1);
+            bool doesUserExist = appDbContext.Users.Any(u => u.Id == userId);
 
-            if (isAdminUserId.UserStatus == 1)
+            if (userIsAdmin && doesUserExist)
             {
-                User requestedUser = appDbContext.Users.Where(u => u.Id == Id).FirstOrDefault();
+                User requestedUser = appDbContext.Users.Where(u => u.Id == userId).FirstOrDefault();
+
 
                 appDbContext.Users.Attach(requestedUser);
 
@@ -135,17 +142,13 @@ namespace WebHttpClient.Controllers
 
                 appDbContext.SaveChanges();
 
-                var response = httpRequest.CreateResponse(HttpStatusCode.OK);
-
-                response.Content = new StringContent(JsonConvert.SerializeObject(requestedUser), System.Text.Encoding.UTF8, "application/json");
+                response = Request.CreateResponse(HttpStatusCode.OK,String.Format("User {0} is deleted ",userId));
 
                 return response;
             }
             else
             {
-                var response = httpRequest.CreateResponse(HttpStatusCode.NotFound);
-
-                response.Content = new StringContent("User not found", System.Text.Encoding.UTF8, "application/json");
+                response = Request.CreateResponse(HttpStatusCode.OK, "User not found");
 
                 return response;
             }
