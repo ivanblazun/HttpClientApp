@@ -33,7 +33,7 @@ namespace WebHttpClient.Controllers
 
             bool doesUserExist = appDbContext.Users.Where(u => u.UserName == newUser.UserName || u.Email == newUser.Email).Any();
 
-            HttpRequestMessage httpRequest = new HttpRequestMessage();
+            HttpResponseMessage response = new HttpResponseMessage();
 
             string userName = newUser.UserName.ToString();
 
@@ -42,32 +42,31 @@ namespace WebHttpClient.Controllers
             string email = newUser.Email.ToString();
 
             DateTime dateTime = DateTime.Now;
-
-            List<string> resp = new List<string> { userName, password, email, dateTime.ToString() };
+                       
 
             if (!doesUserExist)
             {
-
-                User registerUser = newUser;
-
-                registerUser.RegisteredDate = dateTime;
-
+                User registerUser = new User
+                { 
+                    UserName=userName,
+                    Password=password,
+                    Email=email,
+                    RegisteredDate=dateTime,
+                    UserStatus=0
+                };
+                              
                 appDbContext.Users.Add(registerUser);
 
                 appDbContext.SaveChanges();
 
-                var response = httpRequest.CreateResponse(HttpStatusCode.OK);
-
-                response.Content = new StringContent(JsonConvert.SerializeObject(resp), System.Text.Encoding.UTF8, "application/json");
-
+                response = Request.CreateResponse(HttpStatusCode.OK,registerUser);
+                               
                 return response;
             }
             else
             {
-                var response = httpRequest.CreateResponse(HttpStatusCode.NotFound);
-
-                response.Content = new StringContent("User alredy exist", System.Text.Encoding.UTF8, "application/json");
-
+                response = Request.CreateResponse(HttpStatusCode.BadRequest, "User alredy exist");
+                       
                 return response;
             }
         }
@@ -113,23 +112,22 @@ namespace WebHttpClient.Controllers
         // POST api/sqluser/createuserprofile/{userId}, Create user profile
         [Authorize]
         [HttpPost]
-        [Route("api/sqluser/createuserprofile/{userid}")]
-        public HttpResponseMessage CreateUserProfile(HttpRequestMessage httpRequest, int userId, [FromBody] UserProfile createdProfile)
+        [Route("api/sqluser/createuserprofile")]
+        public HttpResponseMessage CreateUserProfile(HttpRequestMessage httpRequest, [FromBody] UserProfile createdProfile)
         {
+            var cU = CuuUser.GetCurrUser();
+
+            var currentUser = appDbContext.Users.Where(u => u.UserName == cU).FirstOrDefault();
+            
             // radi sto bi trebao ali netreba, neka ostane za nedaj bože
             bool doesUserProfileExist = appDbContext.UserProfiles
-                .Where(uP => uP.UserId == createdProfile.UserId)
+                .Where(uP => uP.UserId == currentUser.Id)
                 .Any();
-
+            
             var userProfile = appDbContext.UserProfiles
                 .Where(u => u.FirstName == createdProfile.FirstName || u.LastName == createdProfile.LastName)
                 .FirstOrDefault();
-
-            bool doesUserAlredyHaveProfile = appDbContext.UserProfiles
-                .Where(uP => uP.UserId == userId)
-                .Any();
-
-
+                        
             var response = new HttpResponseMessage();
 
             UserProfile newProfile = new UserProfile();
@@ -142,15 +140,14 @@ namespace WebHttpClient.Controllers
             }
             else
             {
-
-                if (!doesUserProfileExist && !doesUserAlredyHaveProfile)
+                if (!doesUserProfileExist)
                 {
 
                     newProfile.FirstName = createdProfile.FirstName;
                     newProfile.LastName = createdProfile.LastName;
                     newProfile.Avatar = createdProfile.Avatar;
                     newProfile.AboutMyself = createdProfile.AboutMyself;
-                    newProfile.UserId = userId;
+                    newProfile.UserId = currentUser.Id;
 
                     appDbContext.UserProfiles.Add(newProfile);
 
@@ -278,11 +275,11 @@ namespace WebHttpClient.Controllers
         public HttpResponseMessage ValidLogin2(User user)
         {
             bool isUser = appDbContext.Users.Any(u => u.UserName == user.UserName && u.Password == user.Password && u.UserStatus == user.UserStatus);
-
+                        
             if (isUser)
             {
                 var token = TokemManager.CreateJWT(user);
-
+                
                 return Request.CreateResponse(HttpStatusCode.Accepted, token);
             }
             else

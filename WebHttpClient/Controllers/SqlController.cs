@@ -104,6 +104,16 @@ namespace WebHttpClient.Controllers
                 var cU = CuuUser.GetCurrUser();
                 var currentUser = appDbContext.Users.Where(u => u.UserName == cU).FirstOrDefault();
 
+                bool doesThemeExist = appDbContext.Themes.Any(t => t.Id == sendInput.ThemeId);
+
+                if (!doesThemeExist)
+                {
+                    response = Request.CreateResponse(HttpStatusCode.BadRequest, "Post dont contain accurate themeId to belong in");
+
+                    return response;
+                }
+
+
                 if (currentUser != null)
                 {
                     var SendNewPostData = new Models.Post
@@ -206,9 +216,14 @@ namespace WebHttpClient.Controllers
                 var requestedPost = appDbContext.Posts.Where(i => i.Id == postid).FirstOrDefault();
 
                 bool doesPostExist = appDbContext.Posts.Any(p => p.Id == postid);
+                if (!doesPostExist)
+                {
+                    response = Request.CreateResponse(HttpStatusCode.NotFound, "Post dont exist");
+                    
+                    return response;
+                }
 
                 bool doesUserOwnPost = appDbContext.Posts.Any(p => p.UserId == currentUser.Id && requestedPost.UserId == currentUser.Id);
-
                 if (doesUserOwnPost && doesPostExist)
                 {
                     appDbContext.Posts.Attach(requestedPost);
