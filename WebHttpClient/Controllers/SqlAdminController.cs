@@ -45,11 +45,11 @@ namespace WebHttpClient.Controllers
             }
         }
 
-        // GET Get single user by id from admin user api/sqladmin
+        // GET Get single user by ID from admin user api/sqladmin
         [Authorize(Roles = "1")]
         [HttpGet]
-        [Route ("api/sqladmin/GetSingleUser/{userid}")]
-        public HttpResponseMessage GetSingleUser( int userid)
+        [Route ("api/sqladmin/GetSingleUserById/{userid}")]
+        public HttpResponseMessage GetSingleUserByID( int userid)
         {
             HttpResponseMessage response = new HttpResponseMessage();
 
@@ -57,9 +57,12 @@ namespace WebHttpClient.Controllers
 
             var currentUser = appDbContext.Users.Where(u => u.UserName == cU).FirstOrDefault();
 
+            bool doesUserExist = appDbContext.Users.Any(u => u.Id == userid);
+
             User requestedUser = appDbContext.Users.Where(u => u.Id == userid).FirstOrDefault();
 
-            if (currentUser.UserStatus == 1)
+
+            if (doesUserExist)
             {
                 //response.Content = new StringContent(JsonConvert.SerializeObject(requestedUser), System.Text.Encoding.UTF8, "application/json");
 
@@ -68,7 +71,37 @@ namespace WebHttpClient.Controllers
             }
             else
             {
-                response = Request.CreateResponse(HttpStatusCode.Forbidden, "You are not admin");
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "User does not exist");
+                return response;
+            }
+        }
+
+        // GET Get single user by USERNAME from admin user api/sqladmin
+        [Authorize(Roles = "1")]
+        [HttpGet]
+        [Route("api/sqladmin/GetSingleUserByUserName/{username}")]
+        public HttpResponseMessage GetSingleUserByUN(string username)
+        {
+            HttpResponseMessage response = new HttpResponseMessage();
+
+            var cU = CuuUser.GetCurrUser();
+
+            var currentUser = appDbContext.Users.Where(u => u.UserName == cU).FirstOrDefault();
+
+            bool doesUserExist = appDbContext.Users.Any(u => u.UserName == username);
+
+            var requestedUser = appDbContext.Users.Where(u => u.UserName.Contains(username)).ToList();
+
+            if (requestedUser !=null)
+            {
+                //response.Content = new StringContent(JsonConvert.SerializeObject(requestedUser), System.Text.Encoding.UTF8, "application/json");
+
+                response = Request.CreateResponse(HttpStatusCode.OK, requestedUser);
+                return response;
+            }
+            else
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "User does not exist");
                 return response;
             }
         }

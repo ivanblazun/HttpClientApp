@@ -59,20 +59,44 @@ namespace WebHttpClient.Controllers
 
         }
 
-        //GET BY ID api/sql/GetByTitle?title={title}
-        [Route("api/sql/getpostbytitle")]
+        //GET BY ID api/sql/GetByTitle/{title}
+        [Route("api/sql/getpostbytitle/{title}")]
         [HttpGet]
-        public HttpResponseMessage GetPostByTitle([FromUri] string title)
+        public HttpResponseMessage GetPostByTitle( string title)
+        {
+            HttpResponseMessage response = new HttpResponseMessage();       
+
+            var post = appDbContext.Posts.Where(t => t.Title.Contains(title)).ToList();
+
+            bool postIsFound = appDbContext.Posts.Any(t => t.Title.Contains(title));
+
+            if (postIsFound)
+            {
+                response = Request.CreateResponse(HttpStatusCode.OK, post);
+                return response;
+            }
+            else
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "Post does not exist");
+                return response;
+            }
+
+        }
+
+        //GET BY ID api/sql/GetByContent/{content}
+        [Route("api/sql/getpostbycontent/{content}")]
+        [HttpGet]
+        public HttpResponseMessage GetPostByContent(string content)
         {
             HttpResponseMessage response = new HttpResponseMessage();
 
-            bool doesPostExist = appDbContext.Posts.Any(i => i.Title == title);
+            var post = appDbContext.Posts.Where(t => t.Body.Contains(content)).ToList();
 
-            var selectedPosts = appDbContext.Posts.Where(i => i.Title == title);
+            bool postIsFound = appDbContext.Posts.Any(t => t.Body.Contains(content));
 
-            if (doesPostExist)
+            if (postIsFound)
             {
-                response = Request.CreateResponse(HttpStatusCode.OK, selectedPosts);
+                response = Request.CreateResponse(HttpStatusCode.OK, post);
                 return response;
             }
             else

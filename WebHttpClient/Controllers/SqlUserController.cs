@@ -109,12 +109,17 @@ namespace WebHttpClient.Controllers
 
         }
 
-        // POST api/sqluser/createuserprofile/{userId}, Create user profile
+        // POST api/sqluser/createuserprofile   //Create user profile
         [Authorize]
         [HttpPost]
         [Route("api/sqluser/createuserprofile")]
         public HttpResponseMessage CreateUserProfile(HttpRequestMessage httpRequest, [FromBody] UserProfile createdProfile)
         {
+          
+
+
+
+
             var cU = CuuUser.GetCurrUser();
 
             var currentUser = appDbContext.Users.Where(u => u.UserName == cU).FirstOrDefault();
@@ -154,11 +159,12 @@ namespace WebHttpClient.Controllers
                     appDbContext.SaveChanges();
 
                     response = Request.CreateResponse(HttpStatusCode.Accepted, newProfile);
+                                     
 
                     return response;
                 }
                 else
-                {
+                {   
                     response = Request.CreateResponse(HttpStatusCode.NotFound, "You alredy have profile created, maybe update?");
 
                     return response;
