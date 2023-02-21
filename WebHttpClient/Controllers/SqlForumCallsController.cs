@@ -40,20 +40,45 @@ namespace WebHttpClient.Controllers
 
             Forum forum = appDbContext.Forums.Where(f => f.Id == 3).FirstOrDefault();
 
-            var joinedThemesToForum =           
+            var joinedThemesToForum =
                               (from themes in appDbContext.Themes
-                              join forums in appDbContext.Forums on themes.ForumId equals forums.Id
-                              select new
-                              {
-                                  ThemeId=themes.Id,
-                                  ThemeTitle=themes.Title,
-                                  ThemeValue=themes.Value,
-                                  ThemeUserId=themes.UserId
-                              }).Take(10);
+                               join forums in appDbContext.Forums on themes.ForumId equals forums.Id
+                               select new
+                               {
+                                   ThemeId = themes.Id,
+                                   ThemeTitle = themes.Title,
+                                   ThemeValue = themes.Value,
+                                   ThemeUserId = themes.UserId
+                               });
 
             response = Request.CreateResponse(HttpStatusCode.Accepted, joinedThemesToForum);
 
             return response;
+        }
+
+        // GET Get theme by theme name
+        [HttpGet]
+        [Route("api/sqlforumcalls/getthemebyname/{themename}")]
+        public HttpResponseMessage GetThemebyname(string themename)
+        {
+            HttpRequestMessage httpRequest = new HttpRequestMessage();
+
+            var response = new HttpResponseMessage();
+
+            var theme = appDbContext.Themes.Where(t => t.Title.Contains(themename)).ToList();
+
+            bool themeIsFound = appDbContext.Themes.Any(t => t.Title.Contains(themename));
+
+            if (themeIsFound)
+            {
+                response = Request.CreateResponse(HttpStatusCode.OK, theme);
+                return response;
+            }
+            else 
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "Theme is not founded");
+                return response;
+            }
         }
 
         // GEt Get all posts and their from single theme

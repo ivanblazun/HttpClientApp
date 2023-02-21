@@ -40,7 +40,7 @@ namespace WebHttpClient.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         Title = c.String(),
                         Value = c.Int(nullable: false),
-                        UserId = c.Int(nullable: false),
+                        UserId = c.Int(nullable: true),
                         ForumId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)

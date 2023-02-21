@@ -13,7 +13,7 @@ namespace WebHttpClient.Models
 
         // Navigation props
 
-        public int UserId { get; set; }
+        public System.Nullable<int> UserId { get; set; }
 
         public User User { get; set; }
 
