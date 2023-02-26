@@ -13,15 +13,15 @@ using WebHttpClient.UserSecurity;
 
 namespace WebHttpClient.Controllers
 {
-    public class SqlController : ApiController
+    public class SqlPostController : ApiController
     {
 
         public AppDbContext appDbContext = new AppDbContext();
 
 
-        // GET Get all posts from user id api/sql/1
+        // GET Get all posts from user id api/sqlpost/1
         [HttpGet]
-        [Route("api/sql/getallpostfromuser/{userId}")]
+        [Route("api/sqlpost/getallpostfromuser/{userId}")]
         public HttpResponseMessage GetAllPostFromUser(int userId)
         {
             HttpResponseMessage response = new HttpResponseMessage();
@@ -35,8 +35,8 @@ namespace WebHttpClient.Controllers
             return response;
         }
 
-        //GET Get post by id from user id api/sql/GetById/5
-        [Route("api/sql/getspecpostfromuser/{postId}")]
+        //GET Get post by id from user id api/sqlpost/GetById/5
+        [Route("api/sqlpost/getspecpostfromuser/{postId}")]
         [HttpGet]
         public HttpResponseMessage GetSpecPostFromUser([FromBody] User user, [FromUri] int postId)
         {
@@ -59,8 +59,8 @@ namespace WebHttpClient.Controllers
 
         }
 
-        //GET BY ID api/sql/GetByTitle/{title}
-        [Route("api/sql/getpostbytitle/{title}")]
+        //GET BY ID api/sqlpost/GetByTitle/{title}
+        [Route("api/sqlpost/getpostbytitle/{title}")]
         [HttpGet]
         public HttpResponseMessage GetPostByTitle( string title)
         {
@@ -83,8 +83,8 @@ namespace WebHttpClient.Controllers
 
         }
 
-        //GET BY ID api/sql/GetByContent/{content}
-        [Route("api/sql/getpostbycontent/{content}")]
+        //GET BY ID api/sqlpost/GetByContent/{content}
+        [Route("api/sqlpost/getpostbycontent/{content}")]
         [HttpGet]
         public HttpResponseMessage GetPostByContent(string content)
         {
@@ -110,7 +110,7 @@ namespace WebHttpClient.Controllers
         //POST Create new post api/sql
         [Authorize]
         [HttpPost]
-        [Route("api/sql/makenewpost")]
+        [Route("api/sqlpost/makenewpost")]
         public HttpResponseMessage MakeNewPost([FromBody] Post sendInput, HttpRequestMessage httpRequest)
         {
             var response = new HttpResponseMessage();
@@ -162,10 +162,10 @@ namespace WebHttpClient.Controllers
             return null;
         }
 
-        // PUT Update post api/sql/updatepost/5
+        // PUT Update post api/sqlpost/updatepost/5
         [Authorize]
         [HttpPut]
-        [Route("api/sql/updatepost/{postid}")]
+        [Route("api/sqlpost/updatepost/{postid}")]
         public HttpResponseMessage UpdatePost(int postid, [FromBody] Post updateInput, HttpRequestMessage httpRequest)
         {
             var response = new HttpResponseMessage();
@@ -217,10 +217,10 @@ namespace WebHttpClient.Controllers
         }
 
 
-        // DELETE Delete Post api/sql/5
+        // DELETE Delete Post api/sqlpost/5
         [Authorize]
         [HttpDelete]
-        [Route("api/sql/deletepost/{postid}")]
+        [Route("api/sqlpost/deletepost/{postid}")]
         public HttpResponseMessage DeletePost(int postid, HttpRequestMessage httpRequest)
         {
             var response = new HttpResponseMessage();

@@ -185,7 +185,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SqlAdminController.cs" />
-    <Compile Include="Controllers\SqlController.cs" />
+    <Compile Include="Controllers\SqlPostController.cs" />
     <Compile Include="Controllers\SqlForumCallsController.cs" />
     <Compile Include="Controllers\SqlUserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -255,6 +255,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <None Include="Properties\PublishProfiles\WebHttpClientV1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
