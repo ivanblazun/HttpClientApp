@@ -280,6 +280,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Forum.cs" />
+    <Compile Include="Models\MainForum.cs" />
     <Compile Include="Models\Post.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="Models\Theme.cs" />
