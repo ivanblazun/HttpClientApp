@@ -277,6 +277,14 @@
     <Compile Include="Migrations\202302080531024_setUserIdtoNullInThemes.designer.cs">
       <DependentUpon>202302080531024_setUserIdtoNullInThemes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202303071331279_dateandtime.cs" />
+    <Compile Include="Migrations\202303071331279_dateandtime.designer.cs">
+      <DependentUpon>202303071331279_dateandtime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303071350118_addedrelationforumforums.cs" />
+    <Compile Include="Migrations\202303071350118_addedrelationforumforums.designer.cs">
+      <DependentUpon>202303071350118_addedrelationforumforums.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Forum.cs" />
@@ -428,6 +436,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202302080531024_setUserIdtoNullInThemes.resx">
       <DependentUpon>202302080531024_setUserIdtoNullInThemes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303071331279_dateandtime.resx">
+      <DependentUpon>202303071331279_dateandtime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303071350118_addedrelationforumforums.resx">
+      <DependentUpon>202303071350118_addedrelationforumforums.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

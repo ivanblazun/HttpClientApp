@@ -15,7 +15,7 @@ namespace WebHttpClient.Models
 
         // Navigation props
 
-        public int MainForumId { get; set; }
+        public System.Nullable<int> MainForumId { get; set; }
         public MainForum MainForum { get; set; }
         public List<Theme> Posts { get; set; }
     }
