@@ -12,7 +12,7 @@ namespace WebHttpClient.UserSecurity
     {
         //private static string Secret = Guid.NewGuid().ToString();
 
-        private static string Secret = "123h21bcde012t45abjde1623fg9bcde";
+      
 
         public static string GenerateToken(string userName)
         {   
