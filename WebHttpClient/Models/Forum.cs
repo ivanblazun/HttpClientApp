@@ -11,8 +11,12 @@ namespace WebHttpClient.Models
         public string Name { get; set; }
         public int ThemesCounter { get; set; }
         public int UserCounter { get; set; }
+        public DateTime TimeForumCreated { get; set; }
 
         // Navigation props
+
+        public System.Nullable<int> MainForumId { get; set; }
+        public MainForum MainForum { get; set; }
         public List<Theme> Posts { get; set; }
     }
 }

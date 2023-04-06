@@ -19,6 +19,7 @@ namespace WebHttpClient.Data
 
         public DbSet<Forum> Forums { get; set; }
 
+        public DbSet<MainForum> MainForums{ get; set; }
         public DbSet<Theme> Themes { get; set; }
 
         public DbSet<Answer> Answers { get; set; }

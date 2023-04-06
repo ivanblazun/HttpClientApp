@@ -90,6 +90,7 @@ namespace WebHttpClient.Controllers
 
             bool themeExist = appDbContext.Themes.Any(t => t.Title == themeName);
 
+     
             if (!themeExist)
             {
                 response = Request.CreateErrorResponse(HttpStatusCode.NotFound, "Theme was not found");
@@ -98,6 +99,15 @@ namespace WebHttpClient.Controllers
             }
             else 
             {
+                int postCounter = 1;
+
+                foreach (var i in appDbContext.Themes) 
+                {
+                    postCounter++;
+                }
+
+                
+
                 var requestedTheme = appDbContext.Themes.Where(t => t.Title == themeName).FirstOrDefault();
 
                 var joinedPostsOnTheme= (from posts in appDbContext.Posts
@@ -112,7 +122,7 @@ namespace WebHttpClient.Controllers
                                              PostAnswers=posts.Answers,
                                              Post_From_ThemeTitle= requestedTheme.Title,
                                              ThemeId= requestedTheme.Id
-                                         });
+                                         }).Take(postCounter);
 
                 response = Request.CreateResponse(HttpStatusCode.OK, joinedPostsOnTheme);
 

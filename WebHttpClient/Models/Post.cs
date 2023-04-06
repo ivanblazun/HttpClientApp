@@ -14,6 +14,8 @@ namespace WebHttpClient.Models
         public string Body { get; set; }
         public int Value { get; set; }
 
+        public DateTime TimePostCreated { get; set; }
+
         // Navigation props
 
         public int UserId { get; set; }

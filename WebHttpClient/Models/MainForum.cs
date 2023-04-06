@@ -11,5 +11,10 @@ namespace WebHttpClient.Models
         public string Name { get; set; }
         public int ForumsCounter { get; set; }
         public int UserCounter { get; set; }
+
+        // Navigation props
+
+
+        public List<Forum> Forums { get; set; }
     }
 }
