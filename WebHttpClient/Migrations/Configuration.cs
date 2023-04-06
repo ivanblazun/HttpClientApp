@@ -9,7 +9,7 @@ namespace WebHttpClient.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(WebHttpClient.Data.AppDbContext context)
