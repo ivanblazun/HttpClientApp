@@ -23,7 +23,7 @@ namespace WebHttpClient.Data
 
         public DbSet<Answer> Answers { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
-
+        public DbSet<MainForum> MainForums { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 

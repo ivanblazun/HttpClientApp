@@ -212,6 +212,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Forum.cs" />
+    <Compile Include="Models\MainForum.cs" />
     <Compile Include="Models\Post.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="Models\Theme.cs" />
@@ -255,7 +256,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <None Include="Properties\PublishProfiles\WebHttpClientV1 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\WebHttpClient1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
