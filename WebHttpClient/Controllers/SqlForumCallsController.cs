@@ -6,50 +6,86 @@ using System.Net.Http;
 using System.Web.Http;
 using WebHttpClient.Data;
 using WebHttpClient.Models;
-
+using System.Web.Http.Cors;
+using Newtonsoft.Json;
 namespace WebHttpClient.Controllers
 {
-    public class SqlForumCallsController : ApiController
+        public class SqlForumCallsController : ApiController
     {
+       
+
         public AppDbContext appDbContext = new AppDbContext();
 
-        // GET Get main forum entry point
+        //Get main forum entrypoint
         [HttpGet]
-        [Route("api/sqlforumcalls/getforum")]
+        [Route("api/sqlforumcalls/getmainforum")]
+        public HttpResponseMessage GetmainForum() 
+        {
+            HttpRequestMessage httpRequest = new HttpRequestMessage();
+
+            var response = new HttpResponseMessage();
+
+            MainForum mainForum = appDbContext.MainForums.Where(f => f.Id == 1).FirstOrDefault();
+
+            response = Request.CreateResponse(HttpStatusCode.Accepted, mainForum);
+
+            return response;
+        }
+
+        // GET Get all subforums 
+        [HttpGet]
+        [Route("api/sqlforumcalls/getallsubforum")]
         public HttpResponseMessage GetForum()
         {
             HttpRequestMessage httpRequest = new HttpRequestMessage();
 
             var response = new HttpResponseMessage();
 
-            Forum forum = appDbContext.Forums.Where(f => f.Id == 3).FirstOrDefault();
+            List <Forum> listForums = appDbContext.Forums.Where(f => f.MainForumId == 1).ToList();
 
-            response = Request.CreateResponse(HttpStatusCode.Accepted, forum);
+            response = Request.CreateResponse(HttpStatusCode.Accepted, listForums);
 
             return response;
         }
 
-        // GET Get all forum themes
+        // GET Get subforums by id
         [HttpGet]
-        [Route("api/sqlforumcalls/getallthemes")]
-        public HttpResponseMessage GetAllThemes()
+        [Route("api/sqlforumcalls/getforum/{id}")]
+        public HttpResponseMessage GetForum(int id)
         {
             HttpRequestMessage httpRequest = new HttpRequestMessage();
 
             var response = new HttpResponseMessage();
 
-            Forum forum = appDbContext.Forums.Where(f => f.Id == 3).FirstOrDefault();
+            Forum forum = appDbContext.Forums.Where(f => f.Id == id).FirstOrDefault();
+
+            response = Request.CreateResponse(HttpStatusCode.Accepted, forum);
+
+            return response;
+        }
+       
+        // GET Get all subforum themes by subforum id
+        [HttpGet]
+        [Route("api/sqlforumcalls/getallthemes/{id}")]
+        public HttpResponseMessage GetAllThemes(int id)
+        {
+            HttpRequestMessage httpRequest = new HttpRequestMessage();
+
+            var response = new HttpResponseMessage();
+
+            Forum forum = appDbContext.Forums.Where(f => f.Id == id).FirstOrDefault();
 
             var joinedThemesToForum =
                               (from themes in appDbContext.Themes
-                               join forums in appDbContext.Forums on themes.ForumId equals forums.Id
+                               join forums in appDbContext.Forums on themes.ForumId equals forum.Id
                                select new
                                {
                                    ThemeId = themes.Id,
                                    ThemeTitle = themes.Title,
                                    ThemeValue = themes.Value,
-                                   ThemeUserId = themes.UserId
-                               });
+                                   ThemeUserId = themes.UserId,
+
+                               }).Distinct().ToList();
 
             response = Request.CreateResponse(HttpStatusCode.Accepted, joinedThemesToForum);
 
@@ -111,7 +147,11 @@ namespace WebHttpClient.Controllers
                 var requestedTheme = appDbContext.Themes.Where(t => t.Title == themeName).FirstOrDefault();
 
                 var joinedPostsOnTheme= (from posts in appDbContext.Posts
-                                         join theme in appDbContext.Themes on posts.ThemeId equals requestedTheme.Id
+                                         where posts.ThemeId==requestedTheme.Id
+                                         join theme in appDbContext.Themes 
+                                         on posts.ThemeId equals requestedTheme.Id
+                                         into postsPosts 
+                                          
                                          select new
                                          {
                                              PostId = posts.Id,
@@ -122,7 +162,7 @@ namespace WebHttpClient.Controllers
                                              PostAnswers=posts.Answers,
                                              Post_From_ThemeTitle= requestedTheme.Title,
                                              ThemeId= requestedTheme.Id
-                                         }).Take(postCounter);
+                                         });
 
                 response = Request.CreateResponse(HttpStatusCode.OK, joinedPostsOnTheme);
 

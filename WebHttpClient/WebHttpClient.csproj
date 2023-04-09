@@ -282,6 +282,7 @@
     <Compile Include="Models\Forum.cs" />
     <Compile Include="Models\MainForum.cs" />
     <Compile Include="Models\Post.cs" />
+    <Compile Include="Models\RegisterEmail.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\User.cs" />

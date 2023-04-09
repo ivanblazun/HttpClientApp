@@ -13,7 +13,7 @@ using System.Web.Http;
 using WebHttpClient.Data;
 using WebHttpClient.Models;
 using WebHttpClient.UserSecurity;
-
+using System.Net.Mail;
 
 namespace WebHttpClient.Controllers
 {
@@ -24,6 +24,33 @@ namespace WebHttpClient.Controllers
         HttpRequestMessage message = new HttpRequestMessage();
 
         public AppDbContext appDbContext = new AppDbContext();
+
+        // Send email after user register
+        
+        public IHttpActionResult SendRegistermail([FromBody]RegisterEmail regMail)
+        {
+            string subject = regMail.subject;
+            string body = regMail.body;
+            string to = regMail.to;
+
+            MailMessage mailMessage = new MailMessage();
+
+            mailMessage.From = new MailAddress("ivandevloper1985@gmail.com");
+            mailMessage.To.Add(to);
+            mailMessage.Subject = subject;
+            mailMessage.Body = body;
+            mailMessage.IsBodyHtml = false;
+
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com");
+            smtp.UseDefaultCredentials = false;
+            smtp.Port = 587;
+            smtp.EnableSsl = true;
+            smtp.Credentials = new System.Net.NetworkCredential("ivandevloper1985@gmail.com", "wbjfqyropzyshlwz");
+            smtp.Send(mailMessage);
+
+            return Ok();
+
+        }
 
         // POSt Create and register new user
         [HttpPost]
@@ -54,13 +81,22 @@ namespace WebHttpClient.Controllers
                     RegisteredDate=dateTime,
                     UserStatus=0
                 };
-                              
+
+
                 appDbContext.Users.Add(registerUser);
 
                 appDbContext.SaveChanges();
 
                 response = Request.CreateResponse(HttpStatusCode.OK,registerUser);
-                               
+
+                RegisterEmail fromUserCredentials = new RegisterEmail();
+
+                fromUserCredentials.body = "Than you for registration, your user name is " + registerUser.UserName + " and your password is " +registerUser.Password;
+                fromUserCredentials.subject = "Success registration, thank you " +registerUser.UserName;
+                fromUserCredentials.to = registerUser.Email;
+                SendRegistermail(fromUserCredentials);
+
+
                 return response;
             }
             else
@@ -115,10 +151,6 @@ namespace WebHttpClient.Controllers
         [Route("api/sqluser/createuserprofile")]
         public HttpResponseMessage CreateUserProfile(HttpRequestMessage httpRequest, [FromBody] UserProfile createdProfile)
         {
-          
-
-
-
 
             var cU = CuuUser.GetCurrUser();
 
@@ -271,6 +303,30 @@ namespace WebHttpClient.Controllers
             response = Request.CreateResponse(HttpStatusCode.Unauthorized, "You have to be owner of profile to update profile");
 
             return response;
+        }
+
+
+        //Get current user ?????
+        [HttpGet]
+        [Route("api/sqluser/getuser")]
+        public HttpResponseMessage GetUser()
+        {
+            var cU = CuuUser.GetCurrUser();
+
+            var currentUser = appDbContext.Users.Where(u => u.UserName == cU).FirstOrDefault();
+
+            bool userExist = appDbContext.Users.Any(uE => uE.Id == currentUser.Id);
+
+            if (userExist)
+            {
+                return Request.CreateResponse(HttpStatusCode.Accepted, currentUser);
+            }
+            else 
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, "User doest exist");
+            }
+            
+
         }
 
         [Authorize]
