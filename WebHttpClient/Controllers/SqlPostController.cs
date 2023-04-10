@@ -107,6 +107,63 @@ namespace WebHttpClient.Controllers
 
         }
 
+        //POST Create new theme api/sql
+        [Authorize]
+        [HttpPost]
+        [Route("api/sqlpost/makenewtheme")]
+        public HttpResponseMessage MakeNewTheme([FromBody] Theme sendInput, HttpRequestMessage httpRequest)
+        {
+            var response = new HttpResponseMessage();
+
+            if (httpRequest.Headers.Authorization == null)
+            {
+                response = Request.CreateResponse(HttpStatusCode.Unauthorized, "You have to be registered user to create post");
+
+                return response;
+            }
+
+            else
+            {
+                // auth procedure
+                var cU = CuuUser.GetCurrUser();
+                var currentUser = appDbContext.Users.Where(u => u.UserName == cU).FirstOrDefault();
+
+                bool doesThemeExist = appDbContext.Themes.Any(t => t.Title == sendInput.Title);
+
+                if (doesThemeExist)
+                {
+                    response = Request.CreateResponse(HttpStatusCode.BadRequest, "Theme alredy exist");
+
+                    return response;
+                }
+
+                if (currentUser != null)
+                {
+                    var SendNewPostData = new Theme
+                    {   
+                   
+                        Title = sendInput.Title,
+                        Value=sendInput.Value,
+                        UserId=sendInput.UserId,
+                        ForumId=sendInput.ForumId,
+                        TimeThemeCreated= DateTime.UtcNow,
+                    
+
+                    };
+
+                    appDbContext.Themes.Add(SendNewPostData);
+
+                    appDbContext.SaveChanges();
+
+                    response = Request.CreateResponse(HttpStatusCode.OK, SendNewPostData);
+
+                    return response;
+                }
+            }
+
+            return null;
+        }
+
         //POST Create new post api/sql
         [Authorize]
         [HttpPost]
@@ -146,7 +203,8 @@ namespace WebHttpClient.Controllers
                         Body = sendInput.Body,
                         Value = sendInput.Value,
                         UserId = currentUser.Id,
-                        ThemeId = sendInput.ThemeId
+                        ThemeId = sendInput.ThemeId,
+                        TimePostCreated=DateTime.UtcNow
                     };
 
                     appDbContext.Posts.Add(SendNewPostData);

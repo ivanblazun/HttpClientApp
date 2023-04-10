@@ -16,12 +16,11 @@ namespace WebHttpClient.Models
 
         // Navigation props
 
-        public System.Nullable<int> UserId { get; set; }
+        public int UserId { get; set; }
 
         public User User { get; set; }
 
         public int ForumId { get; set; }
-        public Forum Forum { get; set; }
-        public List<Post> Posts { get; set; }
+
     }
 }

@@ -277,6 +277,14 @@
     <Compile Include="Migrations\202302080531024_setUserIdtoNullInThemes.designer.cs">
       <DependentUpon>202302080531024_setUserIdtoNullInThemes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202304100010003_userid.cs" />
+    <Compile Include="Migrations\202304100010003_userid.designer.cs">
+      <DependentUpon>202304100010003_userid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202304100021367_useridUpdatemore.cs" />
+    <Compile Include="Migrations\202304100021367_useridUpdatemore.designer.cs">
+      <DependentUpon>202304100021367_useridUpdatemore.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Forum.cs" />
@@ -436,6 +444,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202303071350118_addedrelationforumforums.resx">
       <DependentUpon>202303071350118_addedrelationforumforums.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304100010003_userid.resx">
+      <DependentUpon>202304100010003_userid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304100021367_useridUpdatemore.resx">
+      <DependentUpon>202304100021367_useridUpdatemore.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
