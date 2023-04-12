@@ -140,13 +140,14 @@ namespace WebHttpClient.Controllers
                 if (currentUser != null)
                 {
                     var SendNewPostData = new Theme
-                    {   
-                   
+                    {
+                
                         Title = sendInput.Title,
                         Value=sendInput.Value,
-                        UserId=sendInput.UserId,
+                        UserId=currentUser.Id,
                         ForumId=sendInput.ForumId,
-                        TimeThemeCreated= DateTime.UtcNow,
+                        TimeThemeCreated= DateTime.Now,
+                    
                     
 
                     };
