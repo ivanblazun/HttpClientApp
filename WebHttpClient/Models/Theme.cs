@@ -11,6 +11,7 @@ namespace WebHttpClient.Models
         public string Title { get; set; }
         public int Value { get; set; }
 
+        public string ThemeBody { get; set; }
         public DateTime TimeThemeCreated { get; set; }
 
 

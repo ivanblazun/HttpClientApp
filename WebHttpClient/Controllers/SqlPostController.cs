@@ -145,6 +145,7 @@ namespace WebHttpClient.Controllers
                         Value=sendInput.Value,
                         UserId=currentUser.Id,
                         ForumId=sendInput.ForumId,
+                        ThemeBody = sendInput.ThemeBody,
                         TimeThemeCreated= DateTime.Now,
                     };
 

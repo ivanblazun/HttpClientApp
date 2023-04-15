@@ -285,6 +285,10 @@
     <Compile Include="Migrations\202304100021367_useridUpdatemore.designer.cs">
       <DependentUpon>202304100021367_useridUpdatemore.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202304152046488_addedbodytotheme.cs" />
+    <Compile Include="Migrations\202304152046488_addedbodytotheme.designer.cs">
+      <DependentUpon>202304152046488_addedbodytotheme.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Forum.cs" />
@@ -313,8 +317,6 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
     <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\ResourceModel.cshtml" />
@@ -337,12 +339,6 @@
     <Content Include="ApplicationInsights.config" />
     <None Include="Properties\PublishProfiles\WebHttpClientV1 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\WebHttpClient1 - Web Deploy.pubxml" />
-    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.4.1.js" />
-    <Content Include="Scripts\jquery-3.4.1.min.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -388,8 +384,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202212302143458_Initial.resx">
@@ -451,6 +445,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202304100021367_useridUpdatemore.resx">
       <DependentUpon>202304100021367_useridUpdatemore.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304152046488_addedbodytotheme.resx">
+      <DependentUpon>202304152046488_addedbodytotheme.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

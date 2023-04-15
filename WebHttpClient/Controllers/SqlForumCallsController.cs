@@ -84,6 +84,7 @@ namespace WebHttpClient.Controllers
                                    ThemeTitle = themes.Title,
                                    ThemeValue = themes.Value,
                                    ThemeUserId = themes.UserId,
+                                   ThemeBody=themes.ThemeBody
 
                                }).Distinct().ToList();
 
