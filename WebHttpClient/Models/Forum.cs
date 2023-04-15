@@ -9,6 +9,7 @@ namespace WebHttpClient.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public int ThemesCounter { get; set; }
         public int UserCounter { get; set; }
         public DateTime TimeForumCreated { get; set; }

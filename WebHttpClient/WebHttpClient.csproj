@@ -289,6 +289,10 @@
     <Compile Include="Migrations\202304152046488_addedbodytotheme.designer.cs">
       <DependentUpon>202304152046488_addedbodytotheme.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202304152142255_addeddesctosubforums.cs" />
+    <Compile Include="Migrations\202304152142255_addeddesctosubforums.designer.cs">
+      <DependentUpon>202304152142255_addeddesctosubforums.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Forum.cs" />
@@ -339,13 +343,6 @@
     <Content Include="ApplicationInsights.config" />
     <None Include="Properties\PublishProfiles\WebHttpClientV1 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\WebHttpClient1 - Web Deploy.pubxml" />
-    <Content Include="Web.config" />
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="Content\Site.css" />
     <Content Include="Views\Web.config" />
@@ -353,6 +350,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Web.Config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -448,6 +446,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202304152046488_addedbodytotheme.resx">
       <DependentUpon>202304152046488_addedbodytotheme.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304152142255_addeddesctosubforums.resx">
+      <DependentUpon>202304152142255_addeddesctosubforums.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
