@@ -19,9 +19,7 @@ namespace WebHttpClient.Controllers
 {
     public class SqlUserController : ApiController
     {
-        HttpClient client = new HttpClient();
 
-        HttpRequestMessage message = new HttpRequestMessage();
 
         public AppDbContext appDbContext = new AppDbContext();
 
@@ -29,13 +27,16 @@ namespace WebHttpClient.Controllers
         
         public IHttpActionResult SendRegistermail([FromBody]RegisterEmail regMail)
         {
+            string emailUser= System.Configuration.ConfigurationManager.AppSettings["EmailUser"];
+            string emailPassword = System.Configuration.ConfigurationManager.AppSettings["EmailPassword"];
+
             string subject = regMail.subject;
             string body = regMail.body;
             string to = regMail.to;
 
             MailMessage mailMessage = new MailMessage();
 
-            mailMessage.From = new MailAddress("ivandevloper1985@gmail.com");
+            mailMessage.From = new MailAddress(emailUser);
             mailMessage.To.Add(to);
             mailMessage.Subject = subject;
             mailMessage.Body = body;
@@ -45,7 +46,7 @@ namespace WebHttpClient.Controllers
             smtp.UseDefaultCredentials = false;
             smtp.Port = 587;
             smtp.EnableSsl = true;
-            smtp.Credentials = new System.Net.NetworkCredential("ivandevloper1985@gmail.com", "wbjfqyropzyshlwz");
+            smtp.Credentials = new System.Net.NetworkCredential(emailUser, emailPassword);
             smtp.Send(mailMessage);
 
             return Ok();
@@ -145,7 +146,7 @@ namespace WebHttpClient.Controllers
 
         }
 
-        // POST api/sqluser/createuserprofile   //Create user profile
+        // POST api/sqluser/createuserprofile  
         [Authorize]
         [HttpPost]
         [Route("api/sqluser/createuserprofile")]

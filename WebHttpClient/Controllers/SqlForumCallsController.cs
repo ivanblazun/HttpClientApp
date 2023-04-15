@@ -117,7 +117,7 @@ namespace WebHttpClient.Controllers
             }
         }
 
-        // GEt Get all posts and their from single theme
+        // GEt Get all posts  from single theme
         [HttpGet]
         [Route("api/sqlforumcalls/getallpostsfromtheme/{themeName}")]
         public HttpResponseMessage GetAllPostsFromSingleTheme([FromUri] string themeName) 
@@ -126,7 +126,6 @@ namespace WebHttpClient.Controllers
 
             bool themeExist = appDbContext.Themes.Any(t => t.Title == themeName);
 
-     
             if (!themeExist)
             {
                 response = Request.CreateErrorResponse(HttpStatusCode.NotFound, "Theme was not found");
@@ -142,27 +141,28 @@ namespace WebHttpClient.Controllers
                     postCounter++;
                 }
 
-                
-
                 var requestedTheme = appDbContext.Themes.Where(t => t.Title == themeName).FirstOrDefault();
 
-                var joinedPostsOnTheme= (from posts in appDbContext.Posts
-                                         where posts.ThemeId==requestedTheme.Id
-                                         join theme in appDbContext.Themes 
-                                         on posts.ThemeId equals requestedTheme.Id
-                                         into postsPosts 
-                                          
-                                         select new
-                                         {
-                                             PostId = posts.Id,
-                                             PostTitle = posts.Title,
-                                             PostBody=posts.Body,
-                                             PostValue = posts.Value,
-                                             PostUserId = posts.UserId,
-                                             PostAnswers=posts.Answers,
-                                             Post_From_ThemeTitle= requestedTheme.Title,
-                                             ThemeId= requestedTheme.Id
-                                         });
+                User user = new User();
+
+                var joinedPostsOnTheme = (from posts in appDbContext.Posts
+                                          where posts.ThemeId == requestedTheme.Id
+                                          join theme in appDbContext.Themes
+                                          on posts.ThemeId equals requestedTheme.Id
+                                          into postsPosts
+
+                                          select new
+                                          {
+                                              PostId = posts.Id,
+                                              PostTitle = posts.Title,
+                                              PostBody = posts.Body,
+                                              PostValue = posts.Value,
+                                              PostUserId = posts.UserId,
+                                              PostAnswers = posts.Answers,
+                                              Post_From_ThemeTitle = requestedTheme.Title,
+                                              ThemeId = requestedTheme.Id,
+                                              UserName = appDbContext.Users.Where(u => u.Id == posts.UserId).FirstOrDefault().UserName
+                                          });
 
                 response = Request.CreateResponse(HttpStatusCode.OK, joinedPostsOnTheme);
 

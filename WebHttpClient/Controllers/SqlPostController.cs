@@ -59,7 +59,7 @@ namespace WebHttpClient.Controllers
 
         }
 
-        //GET BY ID api/sqlpost/GetByTitle/{title}
+        //GET post bytitle api/sqlpost/GetByTitle/{title}
         [Route("api/sqlpost/getpostbytitle/{title}")]
         [HttpGet]
         public HttpResponseMessage GetPostByTitle( string title)
@@ -140,16 +140,12 @@ namespace WebHttpClient.Controllers
                 if (currentUser != null)
                 {
                     var SendNewPostData = new Theme
-                    {
-                
+                    {               
                         Title = sendInput.Title,
                         Value=sendInput.Value,
                         UserId=currentUser.Id,
                         ForumId=sendInput.ForumId,
                         TimeThemeCreated= DateTime.Now,
-                    
-                    
-
                     };
 
                     appDbContext.Themes.Add(SendNewPostData);

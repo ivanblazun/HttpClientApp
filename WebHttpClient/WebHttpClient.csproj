@@ -299,6 +299,7 @@
     <Compile Include="Models\User_UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserSecurity\CuuUser.cs" />
+    <Compile Include="UserSecurity\Keys.cs" />
     <Compile Include="UserSecurity\SecretKey.cs" />
     <Compile Include="UserSecurity\TokemManager.cs" />
     <Compile Include="UserSecurity\UserSecurityAuth.cs" />
